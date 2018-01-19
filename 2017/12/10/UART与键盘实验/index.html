@@ -118,7 +118,7 @@
 <meta property="og:image" content="http://yoursite.com/images/IMG_0341.JPG">
 <meta property="og:image" content="http://yoursite.com/images/IMG_0342.JPG">
 <meta property="og:image" content="http://yoursite.com/images/IMG_0340.JPG">
-<meta property="og:updated_time" content="2017-12-10T07:58:09.000Z">
+<meta property="og:updated_time" content="2018-01-19T08:26:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UART与键盘实验">
 <meta name="twitter:description" content="UART实验波特率为115200Tiny6410提供的裸机代码中已经将相关寄存器的值设置恰当，使得波特率为115200。所以直接编译烧录就行了下面是实验截图：  该图为波特率为115200的测试，可以看到输入ABC得到它们ascii码中下一个字符，即BCD。  当我们将波特率设置为19200时，输入ABC不能得到预期结果。 波特率为19200就像上述提到的，Tiny6410的裸机代码默认的波特率为">
@@ -776,6 +776,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

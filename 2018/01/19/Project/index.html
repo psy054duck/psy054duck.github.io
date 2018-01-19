@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://yoursite.com/images/5fdf8db1cb134954b20e381a564e9258d1094ab8.jpg">
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-07%20下午1.34.27.png">
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-07%20下午9.40.18.png">
-<meta property="og:updated_time" content="2018-01-19T08:10:01.000Z">
+<meta property="og:updated_time" content="2018-01-19T08:20:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="嵌入式软件开发期末project">
 <meta name="twitter:description" content="项目概述基本功能 开发板LCD显示相片 定时播放照片 实现前一张, 后一张, 自动播放, 停止, 开始等按键功能。处于停止状态时，前一张和后一张的功能才生效，即只有在停止播放的情况下才能使用上述两个功能。  拓展功能 在LCD显示相片的同时还能显示时间(精确至秒)。无论相片是否处于播放状态，时间始终会一秒更新一次 图片放大 LED显示数码相册当前状态(是否放大，开始播放还是停止播放)，增加用户体验">
@@ -909,6 +909,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

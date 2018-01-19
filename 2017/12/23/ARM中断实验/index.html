@@ -126,7 +126,7 @@
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-22%20下午11.37.13.png">
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-22%20下午11.43.04.png">
 <meta property="og:image" content="http://yoursite.com/images/5fdf8db1cb134954b20e381a564e9258d1094ab8.jpg">
-<meta property="og:updated_time" content="2017-12-24T16:50:50.000Z">
+<meta property="og:updated_time" content="2018-01-19T08:26:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ARM中断实验">
 <meta name="twitter:description" content="实验目标这次实验要将低电平、高电平、下降沿、上升沿、双边沿触发分别实现出来。开发板上一共8个按键，其中Key1和Key2共用一个引脚，Key3和Key4共用一个引脚，Key5和Key6共用一个引脚，Key7和Key8各占一个引脚，因此8个按键共使用了5个引脚所以我们可以使用一份代码完成这次实验。 配置Key1~Key6修改中断触发方式为了改变按键中断的触发方式，我们需要修改某些寄存器的值，这个可以">
@@ -805,6 +805,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

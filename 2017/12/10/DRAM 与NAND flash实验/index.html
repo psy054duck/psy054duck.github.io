@@ -110,7 +110,7 @@
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-19%20上午9.23.33.png">
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20下午3.04.03.png">
 <meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-23%20下午7.08.04.png">
-<meta property="og:updated_time" content="2017-12-10T07:38:44.000Z">
+<meta property="og:updated_time" content="2018-01-19T08:26:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DRAM 与NAND flash实验">
 <meta name="twitter:description" content="DRAMDRAM状态寄存器首先查看s3c6410的开发者手册，找到DRAM的状态寄存器，如下图所示：  从图中可以看出保存DRAM状态的寄存器为P1MEMSTAT，其访问地址为0x7E001000并且是一个只读寄存器。这个寄存器的高位都是保留部分没有特殊意义。下面对该寄存器各段进行解读：  [31: 9]为保留部分，没有特殊意义。   [8:7]表示s3c6410的DRAM控制器最多能够支持的芯片">
@@ -799,6 +799,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
