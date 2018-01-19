@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="项目概述基本功能 开发板LCD显示相片 定时播放照片 实现前一张, 后一张, 自动播放, 停止, 开始等按键功能。处于停止状态时，前一张和后一张的功能才生效，即只有在停止播放的情况下才能使用上述两个功能。  拓展功能 在LCD显示相片的同时还能显示时间(精确至秒)。无论相片是否处于播放状态，时间始终会一秒更新一次 图片放大 LED显示数码相册当前状态(是否放大，开始播放还是停止播放)，增加用户体验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式软件开发期末project">
+<meta property="og:url" content="http://yoursite.com/2018/01/19/Project/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="项目概述基本功能 开发板LCD显示相片 定时播放照片 实现前一张, 后一张, 自动播放, 停止, 开始等按键功能。处于停止状态时，前一张和后一张的功能才生效，即只有在停止播放的情况下才能使用上述两个功能。  拓展功能 在LCD显示相片的同时还能显示时间(精确至秒)。无论相片是否处于播放状态，时间始终会一秒更新一次 图片放大 LED显示数码相册当前状态(是否放大，开始播放还是停止播放)，增加用户体验">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0442.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0443.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0444.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0445.JPG">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.36.36.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.57.47.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.57.47.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.58.12.png">
+<meta property="og:image" content="http://yoursite.com/images/BMPfileFormat.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午4.34.28.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-06%20下午8.43.54.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-23%20下午5.32.35.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-23%20下午6.04.29.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-23%20下午7.47.48.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-07%20下午12.34.50.png">
+<meta property="og:image" content="http://yoursite.com/images/5fdf8db1cb134954b20e381a564e9258d1094ab8.jpg">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-07%20下午1.34.27.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-01-07%20下午9.40.18.png">
+<meta property="og:updated_time" content="2018-01-19T06:10:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="嵌入式软件开发期末project">
+<meta name="twitter:description" content="项目概述基本功能 开发板LCD显示相片 定时播放照片 实现前一张, 后一张, 自动播放, 停止, 开始等按键功能。处于停止状态时，前一张和后一张的功能才生效，即只有在停止播放的情况下才能使用上述两个功能。  拓展功能 在LCD显示相片的同时还能显示时间(精确至秒)。无论相片是否处于播放状态，时间始终会一秒更新一次 图片放大 LED显示数码相册当前状态(是否放大，开始播放还是停止播放)，增加用户体验">
+<meta name="twitter:image" content="http://yoursite.com/images/IMG_0442.JPG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/19/Project/"/>
+
+
+
+
+
+  <title>嵌入式软件开发期末project | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/19/Project/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">嵌入式软件开发期末project</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-01-19T08:25:13+08:00">
+                2018-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARM裸机开发/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM裸机开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><h3 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h3><ul>
+<li>开发板LCD显示相片</li>
+<li>定时播放照片</li>
+<li>实现<code>前一张</code>, <code>后一张</code>, <code>自动播放</code>, <code>停止</code>, <code>开始</code>等按键功能。处于停止状态时，<code>前一张</code>和<code>后一张</code>的功能才生效，即只有在停止播放的情况下才能使用上述两个功能。</li>
+</ul>
+<h3 id="拓展功能"><a href="#拓展功能" class="headerlink" title="拓展功能"></a>拓展功能</h3><ul>
+<li>在LCD显示相片的同时还能显示时间(精确至秒)。无论相片是否处于播放状态，时间始终会一秒更新一次</li>
+<li>图片放大</li>
+<li>LED显示数码相册当前状态(是否放大，开始播放还是停止播放)，增加用户体验</li>
+</ul>
+<h2 id="项目效果"><a href="#项目效果" class="headerlink" title="项目效果"></a>项目效果</h2><h3 id="缩小状态，停止播放"><a href="#缩小状态，停止播放" class="headerlink" title="缩小状态，停止播放"></a>缩小状态，停止播放</h3><p><img src="/images/IMG_0442.JPG" alt="IMG_0442"></p>
+<h3 id="放大状态，开始播放"><a href="#放大状态，开始播放" class="headerlink" title="放大状态，开始播放"></a>放大状态，开始播放</h3><p><img src="/images/IMG_0443.JPG" alt="IMG_0443"></p>
+<h3 id="缩小状态，开始播放"><a href="#缩小状态，开始播放" class="headerlink" title="缩小状态，开始播放"></a>缩小状态，开始播放</h3><p><img src="/images/IMG_0444.JPG" alt="IMG_0444"></p>
+<h3 id="放大状态，开始播放-1"><a href="#放大状态，开始播放-1" class="headerlink" title="放大状态，开始播放"></a>放大状态，开始播放</h3><p><img src="/images/IMG_0445.JPG" alt="IMG_0445"></p>
+<h2 id="项目开发过程"><a href="#项目开发过程" class="headerlink" title="项目开发过程"></a>项目开发过程</h2><h3 id="相片显示"><a href="#相片显示" class="headerlink" title="相片显示"></a>相片显示</h3><h4 id="将BMP图片加入代码"><a href="#将BMP图片加入代码" class="headerlink" title="将BMP图片加入代码"></a>将BMP图片加入代码</h4><p>用数组的形式将BMP图片放入代码中是最简单粗暴的方法。在ftp中有工具可以将BMP转换成C语言数组，但是输出的内容我看不出来是BMP数据（连开头代表BMP的数据都看不到），所以我们自己写了一份python代码实现将BMP转换成C语言数组。下面是代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bmp2array</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'images.h'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">        cnt = <span class="number">0</span></span><br><span class="line">        fp.write(<span class="string">'typedef unsigned char uint8_t;\n'</span>)</span><br><span class="line">        <span class="keyword">for</span> _, _, files <span class="keyword">in</span> os.walk(<span class="string">'images'</span>):</span><br><span class="line">            <span class="keyword">for</span> name <span class="keyword">in</span> files:</span><br><span class="line">                <span class="keyword">with</span> open(os.path.join(<span class="string">'images'</span>, name), <span class="string">'rb'</span>) <span class="keyword">as</span> image:</span><br><span class="line">                    v = memoryview(image.read())</span><br><span class="line">                    fp.write(<span class="string">'uint8_t image%d[] = &#123;\n\t'</span> % cnt)</span><br><span class="line">                    cnt += <span class="number">1</span></span><br><span class="line">                    i = <span class="number">0</span></span><br><span class="line">                    <span class="keyword">for</span> byte <span class="keyword">in</span> v:</span><br><span class="line">                        fp.write(<span class="string">'0x%x, '</span> % byte)</span><br><span class="line">                        i += <span class="number">1</span></span><br><span class="line">                        <span class="keyword">if</span> i % <span class="number">8</span> == <span class="number">0</span>:</span><br><span class="line">                            fp.write(<span class="string">'\n\t'</span>)</span><br><span class="line">                    fp.write(<span class="string">'\n&#125;;\n'</span>)</span><br><span class="line">        fp.write(<span class="string">'void* images[] = &#123;'</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(cnt):</span><br><span class="line">            fp.write(<span class="string">'image%d, '</span> % i)</span><br><span class="line">        fp.write(<span class="string">'&#125;;\n'</span>)</span><br><span class="line">        fp.write(<span class="string">"#define IMAGENUM %d"</span> % cnt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    bmp2array()</span><br></pre></td></tr></table></figure>
+<p>这份代码主要是将image目录下的所有图片转换成C语言数据，并且将内容写入<code>images.h</code>文件中，方便我们的裸机代码包含并引用指定的图片。从代码中可以看出来，任意一张图片转换成数组之后的名字为<code>imageX</code>，其中X为python在遍历images目录时图片被访问的次序，从0开始计数，即第一张图片的变量名是<code>image0</code>，第二张为<code>image1</code>。除此之外，宏定义<code>IMAGENUM</code>代表了图片个数，最后还有一个<code>void*</code>类型的数组，用来保存所有图片数组的地址，即<code>void* images[] = {image0, image1, …}</code>，方便我们在代码里面索引任意图片。</p>
+<h4 id="python代码测试"><a href="#python代码测试" class="headerlink" title="python代码测试"></a>python代码测试</h4><p><img src="/images/屏幕快照 2017-12-18 下午2.36.36.png" alt="屏幕快照 2017-12-18 下午2.36.36"></p>
+<p>将<code>images.py</code>与目录<code>images</code>放在同一目录下，<code>images</code>目录中放入两张图片。运行代码之后在<code>images.py</code>同一目录下会生成一个<code>images.h</code>文件，里面有两个数组<code>image0</code>和<code>image1</code>，以及一个被定义为2的宏定义<code>IMAGENUM</code>，上述两个数组分别为<code>images</code>目录中两张图片的数组形式。下面是这个头文件的部分内容截图：</p>
+<p><img src="/images/屏幕快照 2017-12-18 下午2.57.47.png" alt="屏幕快照 2017-12-18 下午2.57.47"></p>
+<p><img src="/images/屏幕快照 2017-12-18 下午2.57.47.png" alt="屏幕快照 2017-12-18 下午2.57.47"></p>
+<p><img src="/images/屏幕快照 2017-12-18 下午2.58.12.png" alt="屏幕快照 2017-12-18 下午2.58.12"></p>
+<h4 id="BMP格式解析"><a href="#BMP格式解析" class="headerlink" title="BMP格式解析"></a>BMP格式解析</h4><p>BMP格式在<a href="https://en.wikipedia.org/wiki/BMP_file_format" target="_blank" rel="noopener">维基百科</a>里解释的很详细。下面这张来自维基百科的图片很好的展示了BMP格式的结构，以及各个field代表的意义。</p>
+<p><img src="/images/BMPfileFormat.png" alt="BMPfileFormat"></p>
+<p>图中被我用红色框圈起来的部分是我们在这次实验真正关心的数据。第一个框内的数据表示<code>PixelArray</code>在文件中的偏移量，<code>PixelArray</code>是这个图片真正的RGB数据，我们最终就是使用这部分的数据在LCD上显示图片。<code>PixelArray</code>    的相关内容在后面详细说明。</p>
+<p>第二个框里的数据分别为图片的宽和长。要显示图片，这两个数据显然是很重要的。</p>
+<p>第三个框就是刚才提到的<code>PixelArray</code>，里面存储了图片每个Pixel的RGB值，所以这个部分是最重要的。</p>
+<h4 id="PixelAraay说明"><a href="#PixelAraay说明" class="headerlink" title="PixelAraay说明"></a>PixelAraay说明</h4><blockquote>
+<p>The pixel array is a block of 32-bit DWORDs, that describes the image pixel by pixel. Usually pixels are stored “upside-down” with respect to normal image <a href="https://en.wikipedia.org/wiki/Raster_scan" target="_blank" rel="noopener">raster scan</a> order, starting in the lower left corner, going from left to right, and then row by row from the bottom to the top of the image.</p>
+</blockquote>
+<p>从维基百科的这段话可以知道，在<code>PixelArray</code>中存储的图片是<strong>上下颠倒</strong>的。即这个部分最开始的数据是图片最左下角的数据。因此我们在LCD上生成图片的时候要注意，从左下角开始生成，否则图片会上下颠倒。</p>
+<p>当我们采用24位BMP时，每个Pixel由24位数字决定颜色，RGB三个值，每个值各占8位，范围在<code>0~255</code>。要注意的是这3个8位数据的顺序不是我们常说的R, G, B，而是B, G, R。在解析的时候要注意这个顺序，否则生成的图片会很奇怪。</p>
+<p>从上面解释BMP格式的图片中可以看到，在<code>PixelArray</code>中每一行的末尾都有一些<code>Padding</code>，这个BMP规定了每一行数据长度都要是4个字节的倍数，所以不同的图片<code>padding</code>所占用的字节数不尽相同。百科里给出了每一个数据长度的公式：</p>
+<p>​                                 $$RowSize  = \lfloor {BitsPerPixel \times ImageWidth + 31 \over32} \rfloor \times 4$$</p>
+<p>我们在做解析的时候要注意跳过<code>Padding</code>部分的数据。</p>
+<h4 id="BMP文件头"><a href="#BMP文件头" class="headerlink" title="BMP文件头"></a>BMP文件头</h4><p>为了索引到BMP格式中的各个数据，有两种方式。一种是自己根据上面的结构图，计算出偏移量然后通过指针运算获得数据。另一种是在代码中按照格式定义好对应的<code>struct</code>，然后通过对<code>struct</code>中数据的索引让编译器自动计算好偏移量以获得数据。根据结构图，我们可以按想下面这样定义BMP文件头的<code>struct</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
+<p>这份代码中的数据大小都是按照结构图来定义的，没什么好解释的。但是，编译器在给这个结构体分配内存的时候，会进行内存对齐，这会导致编译器计算出来的数据偏移量与我们预期的不同。所以在上述代码的最后一行有<code>__attribute__((packed))</code>，这是编译器提供的特殊指令，可以让编译器严格按照给定的数据大小给这个<code>struct</code>分配内存。我们可以通过下面这段代码看出加上这个指令前后的区别</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header_with_attribute</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125; __attribute__((packed));</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header</span>&#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sizeof(file_header_with_attribute) = %u\n"</span>, <span class="keyword">sizeof</span>(struct file_header_with_attribute));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sizeof(file_header) = %u\n"</span>, <span class="keyword">sizeof</span>(struct file_header));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码运行结果如下：</p>
+<p><img src="/images/屏幕快照 2017-12-18 下午4.34.28.png" alt="屏幕快照 2017-12-18 下午4.34.28"></p>
+<p>可以看到，由于内存对齐，如果不加入<code>__attribute__((packed))</code>会导致结构体变为16 bytes，而14 bytes才是我们想要的。</p>
+<h4 id="获取PixelArray"><a href="#获取PixelArray" class="headerlink" title="获取PixelArray"></a>获取PixelArray</h4><p>有了上面的结构体，我们就可以很方便的获得BMP图片的PixelArray地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint8_t</span>* getPixelArray(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">	<span class="keyword">int</span> offset = ((struct file_header*) buffer)-&gt;offset;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">uint8_t</span>*) buffer + offset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中<code>buffer</code>中是刚才python代码生成的两个图片数组的任意一个，将其转换成<code>struct file_header*</code>之后，就可以通过索引<code>offset</code>来获得<code>PixelArray</code>的偏移量。然后通过指针运算就可以获得<code>PixelArray</code>的起始地址。</p>
+<h4 id="获取图片的长和宽"><a href="#获取图片的长和宽" class="headerlink" title="获取图片的长和宽"></a>获取图片的长和宽</h4><p>刚才提过，要获取BMP格式中的数据，有两种方法，刚才用了结构体的方法，现在我们用人工计算的方式。在图片宽度这个数据的前面有一个文件头(14 bytes)，和一个DIB头的大小(4 bytes)。所以要找到宽度这个数据，我们就可以通过<code>*((uint8_t*) buffer + 14 + 4)</code>来获得。同理，<code>*((uint8_t*) buffer + 14 + 8)</code>可以用来获取图片的长度。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint32_t</span> getWidth(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">    <span class="keyword">return</span> *(<span class="keyword">uint32_t</span>*) ((<span class="keyword">char</span>*) buffer + <span class="number">14</span> + <span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">uint32_t</span> getHeight(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">    <span class="keyword">return</span> *(<span class="keyword">uint32_t</span>*) ((<span class="keyword">char</span>*) buffer + <span class="number">14</span> + <span class="number">8</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="在LCD上显示图片"><a href="#在LCD上显示图片" class="headerlink" title="在LCD上显示图片"></a>在LCD上显示图片</h4><p>先上代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw_image</span><span class="params">(<span class="keyword">void</span>* buffer)</span> </span>&#123;</span><br><span class="line">	lcd_clear_screen(<span class="number">0xffffff</span>);</span><br><span class="line">	<span class="keyword">size_t</span> rowSize = getRowSize(buffer);</span><br><span class="line">	<span class="keyword">uint32_t</span> width = getWidth(buffer), height = getHeight(buffer);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span>* pixelArray = getPixelArray(buffer);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">RGB</span>* <span class="title">color</span> = <span class="title">NULL</span>;</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> horBegin = WIDTHEIGHT / <span class="number">2</span> - width/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> verBegin = HEIGHT / <span class="number">2</span> - height/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; height; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; width &amp;&amp; j + <span class="number">3</span> &lt; rowSize; ++j) &#123;</span><br><span class="line">			color = (<span class="keyword">void</span>*) (pixelArray + i*rowSize + j*<span class="number">3</span>);</span><br><span class="line">			lcd_draw_pixel(verBegin+height-i<span class="number">-1</span>, horBegin+j, RGB2int(*color));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先利用Tiny6410裸机代码提供的<code>lcd_clear_screen</code>函数清屏。然后通过<code>getRowSize</code>按照百科中给出的公式计算出PixelArray每一行的长度。随后获取图片的长宽和PixelArray地址。<code>struct RGB</code>是按照B, G, R顺序定义的结构体。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">RGB</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span> B;</span><br><span class="line">    <span class="keyword">uint8_t</span> G;</span><br><span class="line">    <span class="keyword">uint8_t</span> R;</span><br><span class="line">&#125;__attribute__((packed));</span><br></pre></td></tr></table></figure>
+<p><code>(horBegin, verBegin)</code>表示图片左上角的点在屏幕上的坐标，通过代码中的计算可以让图片居中显示。</p>
+<p>后面的两重循环是真正的绘图，首先说明一下<code>lcd_draw_pixel</code>三个参数的意义，前两个参数表示当前所操作像素的坐标，第三个参数表示将这个坐标的像素修改成指定的颜色。其中<code>RGB2int</code>将<code>RGB</code>转换成一个<code>int</code>，代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RGB2int</span><span class="params">(struct RGB color)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> color.R &lt;&lt; <span class="number">16</span> | color.G &lt;&lt; <span class="number">8</span> | color.B;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续解释刚才的两重循环，第一层循环遍历每一行没什么好解释的，第二层循环的判断条件为<code>j &lt; width &amp;&amp; j + 3 &lt; rowSize</code>，第一个条件也什么好解释的，第二条件是用来跳过上面提到的<code>Padding</code>的。因为<code>Padding</code>的作用是让一行数据的长度变为4个字节的倍数，所以<code>Padding</code>的大小为0, 1, 2或3。因此如果<code>j + 3 &gt;= rowSize</code>那么说明已经读到了<code>Padding</code>部分，所以我们要跳过这个部分。</p>
+<p>最后在<code>main</code>函数中调用就好了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">  	init_uart();</span><br><span class="line">  	lcd_init();</span><br><span class="line">  	<span class="keyword">void</span>* buffer = (<span class="keyword">void</span>*) image0;</span><br><span class="line">  	draw_image(buffer);</span><br><span class="line">  	<span class="keyword">while</span>(<span class="number">1</span>) &#123;&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="实现图片放大功能"><a href="#实现图片放大功能" class="headerlink" title="实现图片放大功能"></a>实现图片放大功能</h4><p>这是一个简单的数字图像处理。用逆向差值就可以实现了。如果<code>f(x, y)</code>为原图像，<code>g(x, y)</code>为放大后的图像。那么如果把宽变为为原来的<code>n</code>倍，高变为为原来的<code>m</code>倍，那么两个图像有这样的关系:</p>
+<p>$$f(x, y) = g(n <em> x, m </em> y)$$</p>
+<p>如果原图像的宽和高为<code>width</code>和<code>height</code>，那么放大后的就是<code>n * width</code>和<code>m * height</code>。显然，我们是用两层循环来将图片写入LCD上的，但是循环遍历的是哪个图片很重要。如果循环遍历的是原图像，那么就是将原图像的<code>(x, y)</code>像素填入放大图像的<code>(n * x, m * y)</code>像素，这样的话在LCD上显示出来的图片也只有<code>width * height</code>个，但实际上应该要有<code>m * n * width * height</code>，这就造成了像素之间有空白点出现。</p>
+<p>为了这个问题，我们可以反过来想，不遍历原图像，而是遍历放大后的图像，于是使用另一个公式:</p>
+<p>$$g(x, y) = f({x \over n},{y \over m})$$</p>
+<p>也就是说，如果要填充放大后图像的<code>(x, y)</code>坐标，我们就用上述公式找到它在原图像上的像素<code>(x / n, y / m)</code>。这里我们直接利用了整型除法的截断特性，保证每次得到的结果都是整数。当然这种粗暴的做法不是很好，比较理想的做法应该是计算得到<code>x/n</code>和<code>y/n</code>的真实值，即不截断，然后根据结果找到离这个结果最近的四个像素点，然后通过离这四个点的距离进行加权平均得到像素值再填入放大图像的<code>(x, y)</code>上。我们这次project没有采用这种方案，而是直接截断，原因很简单，因为方便实现。下面是这个函数的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw_image_double</span><span class="params">(<span class="keyword">void</span>* buffer)</span> </span>&#123;</span><br><span class="line">	lcd_clear_screen(<span class="number">0xffffff</span>);</span><br><span class="line">	<span class="keyword">size_t</span> rowSize = getRowSize(buffer);</span><br><span class="line">	<span class="keyword">uint32_t</span> width = getWidth(buffer) * <span class="number">2</span>, height = getHeight(buffer) * <span class="number">2</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">uint8_t</span>* pixelArray = getPixelArray(buffer);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">RGB</span>* <span class="title">color</span> = <span class="title">NULL</span>;</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> horBegin = WIDTHEIGHT / <span class="number">2</span> - width/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> verBegin = HEIGHT / <span class="number">2</span> - height/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; height; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; width &amp;&amp; j + <span class="number">3</span> &lt; rowSize; ++j) &#123;</span><br><span class="line">			color = (<span class="keyword">void</span>*) (pixelArray + (i/<span class="number">2</span>)*rowSize + (j/<span class="number">2</span>)*<span class="number">3</span>);</span><br><span class="line">			lcd_draw_pixel(verBegin+height-i<span class="number">-1</span>, horBegin+j, RGB2int(*color));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，与<code>draw_image</code>的差别主要在于两层<code>for</code>循环是在遍历放大后图片的空间，因为<code>height</code>和<code>width</code>两个变量在计算时已经乘以2了。然后是用公式计算放大后<code>(i, j)</code>像素在原图像的位置，因为我们实现的是放大为两倍，所以结果为<code>(i/2, j/2)</code>，这就是<code>color</code>计算时<code>i</code>, <code>j</code>除以2的原因。</p>
+<h3 id="图片定时播放"><a href="#图片定时播放" class="headerlink" title="图片定时播放"></a>图片定时播放</h3><h4 id="初始化定时中断"><a href="#初始化定时中断" class="headerlink" title="初始化定时中断"></a>初始化定时中断</h4><p>Tiny6410的裸机代码当中已经实现了大部分计时器需要用到的代码，将<code>timer.c</code>中的代码代码放到<code>irq.c</code>文件中，并且在<code>main</code>函数中调用<code>timer_init</code>函数。这个函数共接受5个参数，其中第4个参数是我们需要的。</p>
+<p>在<code>TCNTB0</code>寄存器中存放了一个定时器的计数器，每次定时器触发就会将这个寄存器的值减一，当这个值减至0就会触发定时器中断，就可以执行中断处理函数中的代码。由于定时器的频率设置为了<code>62500</code>，所以每过1秒，这个计数器中的值就会减少<code>62500</code>。而刚才提到的<code>timer_init</code>函数的第四个参数就是用来设置这个计数器的值。所以将<code>n * 62500</code>作为参数传入，就可以意味着定时器中断每过<code>n</code>秒触发一次。在这次project当中，我们将<code>n</code>定为1，即中断每秒触发一次。下面是在<code>main</code>函数中调用<code>timer_init</code>函数的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timer_init(<span class="number">0</span>, <span class="number">65</span>, <span class="number">4</span>, <span class="number">1</span> * <span class="number">62500</span>, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>设置好之后，每过1秒就会触发一次中断，并执行一次<code>do_irq()</code>函数。所以接下来我们要为定时器中断实现一个中断处理函数。</p>
+<h4 id="中断处理函数"><a href="#中断处理函数" class="headerlink" title="中断处理函数"></a>中断处理函数</h4><p>因为要实现相片的循环播放，所以我们需要用一个变量来记录当前显示的是哪一图片。我们通过一个静态变量<code>static int j</code>来完成这件事。将它声明为<code>static</code>或是全局变量都可以，只要每次执行<code>do_irq</code>的时候，它都能够正确的表示当前显示的是哪一张图片就好。将它声明为<code>int</code>是因为所有图片都已经存储在了<code>images</code>数组当中，所以对图片的访问就是对这个数组的访问，这个数组存储了所有图片的起始地址，对这个变量进行数组访问就可以得到对应的图片，所以将<code>j</code>声明为<code>int</code>就可以代表当前显示的是哪一张图片。而要获得下一张图片只要做<code>j = (j + 1) % IMAGENUM</code>计算就可以了。因为是循环播放，所以在加一之后还要做取模运算，注意<code>IMAGENUM</code>是在<code>images.h</code>头文件当中用于记录图片数量的宏定义。</p>
+<h5 id="中断判断"><a href="#中断判断" class="headerlink" title="中断判断"></a>中断判断</h5><p>进入<code>do_irq</code>函数，第一件要做的事情是判断是哪一个中断产生了，因为在后续过程中还要实现按键中断，所以整个project中不止有一个定时器中断，因此在这里做判断是有必要的。s3c6410共有5个计时器分别为<code>Timer 0</code>，<code>Timer 1</code>，<code>Timer 2</code>，<code>Timer 3</code>，<code>Timer 4</code>。在这个project当中我们只用到了<code>Timer 0</code>，所以只需要对它做判断就行了。</p>
+<p><code>TINT_CSTAT</code>寄存器用于控制与记录计时器的状态，它的相关信息如下图所示：</p>
+<p><img src="/images/屏幕快照 2018-01-06 下午8.43.54.png" alt="屏幕快照 2018-01-06 下午8.43.54"></p>
+<p>从图中可以看到<code>TINT_CSTAT</code>的第5位表示的就是<code>Timer 0</code>的状态，所以我们读取这一位的信息就可以知道是不是这个中断产生了。</p>
+<h5 id="中断处理"><a href="#中断处理" class="headerlink" title="中断处理"></a>中断处理</h5><p>由于我们实现的是每两秒切换一次图片，而定时中断是每秒产生一次，因此我们还用了一个<code>int</code>变量<code>cnt</code>来存储中断触发的次数。每次定时中断产生，这个变量的值就加一，只有当这个值为偶数时才切换图片。</p>
+<p>由于后面还要实现按键控制播放与停止，所以我们还需要一个变量<code>canDraw</code>来表示当前处于播放还是停止的状态。所以综合上述只有当<code>canDraw == 1 &amp;&amp; cnt % 2 == 0</code>这个判断条件成立时才会开始切换图片。切换图片的方法在前面已经讨论过了，对<code>j</code>进行<code>j = (j + 1) % IMAGENUM</code>计算，这样<code>j</code>就指向了下一张图片，调用<code>draw_image</code>将新的图片重新写入缓存，就可以在LCD实现切换功能了。主要代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((TINT_CSTAT &gt;&gt; <span class="number">5</span>) &amp; <span class="number">1</span>) &#123;</span><br><span class="line">    ++cnt;</span><br><span class="line">    <span class="keyword">if</span> (canDraw &amp;&amp; cnt % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">        j = (j + <span class="number">1</span>) % IMAGENUM;</span><br><span class="line">        buffer = images[j];</span><br><span class="line">        draw_image(buffer);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//清timer0的中断状态寄存器</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> uTmp;</span><br><span class="line">    uTmp = TINT_CSTAT;</span><br><span class="line">    TINT_CSTAT = uTmp;      </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###按键功能</p>
+<h4 id="按键功能描述"><a href="#按键功能描述" class="headerlink" title="按键功能描述"></a>按键功能描述</h4><p>使用到的按键以及相关信息如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>功能描述</th>
+<th>触发方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key 3</td>
+<td>在停止播放状态下按下该键，切换至下一张图片</td>
+<td>下降沿触发</td>
+</tr>
+<tr>
+<td>Key 4</td>
+<td>在停止播放状态下按下该键，切换至上一张图片</td>
+<td>下降沿触发</td>
+</tr>
+<tr>
+<td>Key 5</td>
+<td>在播放状态下按下该键，停止播放，并开启Key 3 和 Key 4的功能且熄灭LED 2</td>
+<td>下降沿触发</td>
+</tr>
+<tr>
+<td>Key 6</td>
+<td>在停止状态下按下该键，开始播放，并取消Key 3和Key 4的功能且点亮LED 2</td>
+<td>下降沿触发</td>
+</tr>
+<tr>
+<td>Key 2</td>
+<td>切换显示大小，如果切换至放大状态则点亮LED 1，否则熄灭</td>
+<td>下降沿触发</td>
+</tr>
+</tbody>
+</table>
+<h4 id="中断处理-1"><a href="#中断处理-1" class="headerlink" title="中断处理"></a>中断处理</h4><p>因为涉及到的按键均在<code>VIC0</code>当中，所以功能实现起来就简单许多。</p>
+<p><code>EINT0CON0</code>用于控制以上按键的中断触发方式，相关信息如下：</p>
+<p><img src="/images/屏幕快照 2017-12-23 下午5.32.35.png" alt="屏幕快照 2017-12-23 下午5.32.35"></p>
+<p>从下图可以看出五个个按键的引脚是<code>EINT1</code>, <code>EINT2</code>, <code>EINT3</code>, <code>EINT4</code>, <code>EINT5</code>。</p>
+<p><img src="/images/屏幕快照 2017-12-23 下午6.04.29.png" alt="屏幕快照 2017-12-23 下午6.04.29"></p>
+<p>按照我们的设计，我们需要设置五个按键为下降沿触发，所以将<code>EINT0CON0</code>的<code>[4:7]</code>位和<code>[8:11]</code>位设置成<code>0x2</code>。</p>
+<p>像定时器中断一样，进入了<code>do_irq</code>函数之后需要判断是哪一个中断触发了。因为这个project当中只用到了定时器中断和按键中断，所以按键中断就不用特地判断了，将功能写在定时器中断判断的<code>else</code>当中就好了。</p>
+<p>光判断了是按键中断还不够，因为按键有4个，所以我们还需要判断是哪一个按键产生了。四个按键的状态存储在了<code>EINT0PEND</code>寄存器当中。该寄存器的描述如下：</p>
+<p><img src="/images/屏幕快照 2017-12-23 下午7.47.48.png" alt="屏幕快照 2017-12-23 下午7.47.48"></p>
+<p>这个表格很简单，为了判断是哪个按键产生的中断，只需要读取<code>EINT0PEND</code>寄存器的<code>[2:5]</code>位。</p>
+<p>判断了是哪个中断产生之后，就可以给五个按键分别实现功能了。</p>
+<p>首先是<code>Key 3</code>和<code>Key 4</code>的功能。它们的作用是修改显示的图片，在前面已经说到了，当前显示哪个图片由变量<code>j</code>控制，所以这两个按键的功能很简单，就是分别用<code>j = (j + IMAGENUM -1) % IMAGENUM</code>和<code>j = (j + 1) % IMAGENUM</code>修改<code>j</code>的值，分别表示前一张图片和后一张图片。修改了<code>j</code>之后，调用<code>draw_image</code>就可以修改LCD上的图片了。</p>
+<p>然后是<code>Key 5</code>和<code>Key 6</code>。这两个键控制是否处于播放状态。在前面的实现中，我们用<code>canDraw</code>来控制是否处于播放状态。所以在这两个按键的功能当中修改<code>canDraw</code>的值就可以完成播放与停止两个状态的切换。</p>
+<p>这部分的代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">6</span>; i ++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (EINT0PEND &amp; (<span class="number">1</span>&lt;&lt;i)) &#123;</span><br><span class="line">        delay(<span class="number">100000</span>);</span><br><span class="line">        <span class="keyword">if</span> (! (GPNDAT &amp; (<span class="number">1</span> &lt;&lt; i))) &#123;</span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">3</span> &amp;&amp; canDraw == <span class="number">0</span>) &#123;</span><br><span class="line">                j = (j+IMAGENUM<span class="number">-1</span>) % IMAGENUM;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">2</span> &amp;&amp; canDraw == <span class="number">0</span>) &#123;</span><br><span class="line">                j = (j+<span class="number">1</span>) % IMAGENUM;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">4</span>) &#123;</span><br><span class="line">                canDraw = <span class="number">0</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">5</span>) &#123;</span><br><span class="line">                canDraw = <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">1</span>) &#123;</span><br><span class="line">                mode = <span class="number">1</span> - mode;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (mode) &#123;</span><br><span class="line">    GPKDAT &amp;= ~(<span class="number">1</span>&lt;&lt;<span class="number">4</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    GPKDAT |= <span class="number">1</span>&lt;&lt;<span class="number">4</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (canDraw) &#123;</span><br><span class="line">    GPKDAT &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">5</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    GPKDAT |= <span class="number">1</span> &lt;&lt; <span class="number">5</span>;</span><br><span class="line">&#125;</span><br><span class="line">buffer = images[j];</span><br><span class="line"><span class="keyword">if</span> (pre_j != j || pre_mode != mode) &#123;</span><br><span class="line">    draw[mode](buffer);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 清中断 */</span></span><br><span class="line">EINT0PEND   = <span class="number">0x3f</span>;</span><br><span class="line">VIC0ADDRESS = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>代码中的<code>delay</code>和电平判断的代码与消除按键抖动有关。在后面的经验总结会提到。</p>
+<p>代码中倒数第二和倒数第三个<code>if</code>语句，分为用来控制LED 2和LED 1的亮灭。LED的代码很简单，在这份报告里就不详细说明了。</p>
+<p>注意，代码中的<code>draw</code>是一个函数数组，它存储了两个函数分别为<code>draw_image</code>和<code>draw_image_double</code>。<code>mode</code>是一个<code>int</code>类型的变量，用来表示当前是否处于放大状态，如果是则值为<code>1</code>，否则为<code>0</code>。所以通过<code>mode</code>索引<code>draw</code>数组就可以调用相应的函数了。<code>draw</code>数组定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="keyword">void</span> <span class="title">function</span><span class="params">(<span class="keyword">void</span>* buffer)</span></span>;</span><br><span class="line">function* draw[] = &#123;draw_image, draw_image_double&#125;;</span><br></pre></td></tr></table></figure>
+<p>###LCD上显示时间</p>
+<p>要在LCD上显示时间，首先要做的是获取时间。这个部分在Tiny6410的逻辑代码中已经提供了。但是它实现的功能是在串口上输出时间，我们需要把这部分改成在LCD上显示时间。然后是将这部分的功能添加在定时器中断的处理函数当中已真正实现LCD上显示时间。</p>
+<h4 id="BCD转十进制"><a href="#BCD转十进制" class="headerlink" title="BCD转十进制"></a>BCD转十进制</h4><p>因为在s3c6410中的时间是以BCD码的形式提供的，所以在使用之前我们要将BCD转换为十进制数。</p>
+<p>BCD码每4位对应十进制的相应数位。所以将BCD每四位提取出来就可以得到对应的十进制数了。下面这个函数的代码:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">unsigned</span> <span class="title">bcd2dec</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">while</span> (n) &#123;</span><br><span class="line">		res += (n % <span class="number">16</span>) * i;</span><br><span class="line">		n &gt;&gt;= <span class="number">4</span>;</span><br><span class="line">		i *= <span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="时间获取"><a href="#时间获取" class="headerlink" title="时间获取"></a>时间获取</h4><p>这里只描述提供代码中我们需要的部分。</p>
+<p><code>BCDYEAR</code>, <code>BCDMON</code>, <code>BCDDATE</code>, <code>BCDHOUR</code>, <code>BCDMIN</code>, <code>BCDSEC</code>, <code>BCDDAY</code>7个寄存器存储了年、月、日、时、分、秒、星期7个信息。但是这7个值是以BCD码存储，所以要使用这些值，我们需要将BCD码转换成十进制。在我们的实现当中，<code>times</code>数组存储了上面7个值的十进制数。这个数组的更新通过调用<code>updateTime</code>函数来触发。</p>
+<h4 id="字体模型"><a href="#字体模型" class="headerlink" title="字体模型"></a>字体模型</h4><p>在LCD上无论要显示什么，本质上都是在LCD上画出相应的内容。所以要在LCD上显示时间，我们需要能够在屏幕上画出数字。因为数字的形状是固定不变的，所以我们可以事先在一个数组中写上每个数字的像素值。在Tiny6410提供的裸机代码中已经写好了这个数组。它提供了所有acsii码的画法，我们只要其中的11个，分别是<code>0~9</code>和<code>:</code>。我们将这个部分代码放在<code>font.h</code>中，<code>fonts</code>数组用来存储这些字符的模型，下面是这个头文件的部分内容。</p>
+<p><img src="/images/屏幕快照 2018-01-07 下午12.34.50.png" alt="屏幕快照 2018-01-07 下午12.34.50"></p>
+<h4 id="在LCD上显示时间"><a href="#在LCD上显示时间" class="headerlink" title="在LCD上显示时间"></a>在LCD上显示时间</h4><p>在提供的代码中已经给出了利用<code>fonts</code>数组在LCD上显示字符的代码，我们将它提取出来单独写在了函数<code>lcd_draw_digit</code>中。代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_draw_digit</span><span class="params">(<span class="keyword">int</span> n, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> line_dots = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> *char_dots = fonts + n * <span class="number">8</span>;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		line_dots = char_dots[i];</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">// 为1,则描白点</span></span><br><span class="line">			<span class="keyword">if</span> (line_dots &amp; (<span class="number">0x80</span> &gt;&gt; j))</span><br><span class="line">			&#123;</span><br><span class="line">				lcd_draw_pixel(y+i, x+j, <span class="number">0</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// 为0,则描黑点</span></span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">			&#123;</span><br><span class="line">				lcd_draw_pixel(y+i, x+j, <span class="number">0xffffff</span>);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>三个参数分别代表要输出字符的ascii码，和要画在LCD上的坐标。</p>
+<p>有了上面这个函数，接下来要在LCD上显示时间就简单了。主要将<code>times</code>数组中的值一一作为参数调用<code>lcd_draw_digit</code>就好了。下面是这个函数的代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lcd_draw_time</span><span class="params">(<span class="keyword">int</span> beginX, <span class="keyword">int</span> beginY)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">unsigned</span>* Times = getTime();</span><br><span class="line">	<span class="keyword">int</span> x = beginX;	<span class="comment">// 第几列</span></span><br><span class="line">	<span class="keyword">int</span> y = beginY;	<span class="comment">// 第几行</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 获得字模</span></span><br><span class="line"></span><br><span class="line">	lcd_draw_digit(Times[<span class="number">0</span>] / <span class="number">10</span>, x, y);</span><br><span class="line">	x += <span class="number">8</span>;</span><br><span class="line">	lcd_draw_digit(Times[<span class="number">0</span>] % <span class="number">10</span>, x, y);</span><br><span class="line">	x += <span class="number">8</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; <span class="number">3</span>; ++i) &#123;</span><br><span class="line">		<span class="keyword">int</span> t = Times[i];</span><br><span class="line">		lcd_draw_digit(<span class="number">10</span>, x, y);</span><br><span class="line">		x += <span class="number">8</span>;</span><br><span class="line">		lcd_draw_digit(t / <span class="number">10</span>, x, y);</span><br><span class="line">		x += <span class="number">8</span>;</span><br><span class="line">		lcd_draw_digit(t % <span class="number">10</span>, x, y);</span><br><span class="line">		x += <span class="number">8</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数的两个参数是用来控制LCD坐标的。在代码中每调用一次<code>lcd_draw_digit</code>，就将<code>x</code>的值加8，这是因为我们的数字模型是8个像素大小。</p>
+<h4 id="将显示时间的功能加入定时器中断"><a href="#将显示时间的功能加入定时器中断" class="headerlink" title="将显示时间的功能加入定时器中断"></a>将显示时间的功能加入定时器中断</h4><p>由于我们的时间显示精确至秒，而我们的定时器中断每秒触发一次，所以每次触发的时候就调用一次<code>lcd_draw_time</code>函数就好了。下面是修改后的定时器中断处理代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">++cnt;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> uTmp;</span><br><span class="line"><span class="keyword">if</span> (canDraw &amp;&amp; cnt % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">    j = (j + <span class="number">1</span>) % IMAGENUM;</span><br><span class="line">    buffer = images[j];</span><br><span class="line">    draw_image(buffer);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">int</span> timeBeginX = WIDTHEIGHT / <span class="number">2</span> - <span class="number">30</span>;</span><br><span class="line"><span class="keyword">int</span> timeBeginY = HEIGHT / <span class="number">6</span>;</span><br><span class="line">lcd_draw_time(timeBeginX, timeBeginY);</span><br><span class="line"><span class="comment">//清timer0的中断状态寄存器</span></span><br><span class="line">uTmp = TINT_CSTAT;</span><br><span class="line">TINT_CSTAT = uTmp;</span><br></pre></td></tr></table></figure>
+<h2 id="经验总结"><a href="#经验总结" class="headerlink" title="经验总结"></a>经验总结</h2><h3 id="消除按键抖动"><a href="#消除按键抖动" class="headerlink" title="消除按键抖动"></a>消除按键抖动</h3><p>在先前的按键中断时间中已经遇到过按键抖动问题，在这个project实现当中我们同样遇到了这样的问题。</p>
+<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>在实现了按键中断功能之后会发现有时候按下一次按键，对应的功能会生效多次。如果是设置为电平触发的话，那产生这个现象很正常。但是即使是设置成边沿触发也同样会有相同的现象产生。</p>
+<h4 id="问题原因"><a href="#问题原因" class="headerlink" title="问题原因"></a>问题原因</h4><p><img src="/images/5fdf8db1cb134954b20e381a564e9258d1094ab8.jpg" alt="5fdf8db1cb134954b20e381a564e9258d1094ab8"></p>
+<p>这张图片是按下按键之后，对应按键产生的电平变化。理想状况下，一次按键按下与松开，上升沿和下降沿应该各出现一次。但是实际上，从图中可以明显看出按下一次按键，下降沿出现了不止一次。这种现象就是按键抖动。</p>
+<h4 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h4><p>从图中可以看出来，每次按下按键，首先一定会出现一次下降沿。这个下降沿是我们真正需要的。也就是说，按下按键之后第一次执行的<code>do_irq</code>函数是我们真正需要的。如果不做其它处理，那么按下一次按键，这个函数会执行数次。所以我们需要有能力在第一次函数执行的时候避开后面的中断触发。</p>
+<p>首先要认识到一点，当按键中断发生的时候，其它按键中断会被暂时屏蔽掉，也就是说，程序在<code>do_irq</code>中运行的时候后面即使有其它按键中断产生，也不会打断当前中断代码的执行。所以在第一次中断产生的时候，我们可以通过<code>delay</code>函数使程序避开图中的前沿抖动阶段，直到进入了稳定的电平状态才开始执行并退出中断处理函数，然后清空中断悬挂寄存器。这样就可以做到按下一次只有一个下降沿触发产生。这就是<code>do_irq</code>函数中<code>delay</code>以及后面的电平判断的作用。</p>
+<h3 id="ARM除法操作"><a href="#ARM除法操作" class="headerlink" title="ARM除法操作"></a>ARM除法操作</h3><h4 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h4><p>这次project实现过程中，我们使用了除法操作，但是在编译的时候出现了下面这样的报错提示：</p>
+<p><img src="/images/屏幕快照 2018-01-07 下午1.34.27.png" alt="屏幕快照 2018-01-07 下午1.34.27"></p>
+<p>图中产生的问题是有四个未定义的函数引用。</p>
+<p>如果解决了上面这个问题，还可能出现下面的报错：</p>
+<p><img src="/images/屏幕快照 2018-01-07 下午9.40.18.png" alt="屏幕快照 2018-01-07 下午9.40.18"></p>
+<p>提示说缺少<code>raise</code>函数。</p>
+<h4 id="问题原因-1"><a href="#问题原因-1" class="headerlink" title="问题原因"></a>问题原因</h4><p>这个问题产生的原因是ARM在硬件上不支持除法操作，需要用软件模拟。图中的四个函数就是用来模拟除法的。链接器在链接的时候不知道这些函数的位置，所以产生了上面的错误。<code>raise</code>还是貌似是用来处理除以0的情况。</p>
+<h4 id="问题解决-1"><a href="#问题解决-1" class="headerlink" title="问题解决"></a>问题解决</h4><p>因为除法是很基本的操作，所以通常编译器都会提供相应的软件模拟代码。而我们使用的交叉编译器也同样提供了相应代码，只是链接器并不知道，需要我们指定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;LD&#125; $^ -Tlcd.lds -L /home/wcl/opt/FriendlyARM/toolschain/4.5.1/lib/gcc/arm-none-linux-gnueabi/4.5.1 -lgcc -o lcd.elf</span><br></pre></td></tr></table></figure>
+<p>在链接器命令后面用<code>-L</code>指定静态链接库路径，这个库在编译器的相关目录下。我们需要的库是<code>libgcc.a</code>，所以用<code>-lgcc</code>来链接这个库。上面提到的四个函数就实现在这个库当中。链接了这个库之后，再次编译，有可能出现第二幅图的报错，提示说缺少<code>raise</code>函数。这个函数我们自己写就好，不需要执行什么内容：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">raise</span><span class="params">(<span class="keyword">int</span> s)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>现在应该就可以通过编译了。</p>
+<h2 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h2><p>因为临近期末精力有限，所以很多实现都采用比较简单的实现方式。</p>
+<h3 id="window"><a href="#window" class="headerlink" title="window"></a>window</h3><p>s3c6410提供了几层<code>window</code>来控制LCD的显示。时间和图片的显示应该放在不同的<code>window</code>上，但是这需要一堆新的代码用来做配置，因为时间不够所以只能将时间和图片都放在同一个<code>window</code>上显示了。</p>
+<h3 id="可执行文件的大小限制"><a href="#可执行文件的大小限制" class="headerlink" title="可执行文件的大小限制"></a>可执行文件的大小限制</h3><p>不知道是什么原因，编译后的可执行文件如果过大，Minitools会报出bootloader格式出错的问题。所以在代码中能够放入的图片有限，这个问题不知道如何解决。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/31/8-3/" rel="next" title="8.3">
+                <i class="fa fa-chevron-left"></i> 8.3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/19/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="John Doe" />
+          
+            <p class="site-author-name" itemprop="name">John Doe</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Kategorien</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目概述"><span class="nav-number">1.</span> <span class="nav-text">项目概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本功能"><span class="nav-number">1.1.</span> <span class="nav-text">基本功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拓展功能"><span class="nav-number">1.2.</span> <span class="nav-text">拓展功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目效果"><span class="nav-number">2.</span> <span class="nav-text">项目效果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缩小状态，停止播放"><span class="nav-number">2.1.</span> <span class="nav-text">缩小状态，停止播放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大状态，开始播放"><span class="nav-number">2.2.</span> <span class="nav-text">放大状态，开始播放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缩小状态，开始播放"><span class="nav-number">2.3.</span> <span class="nav-text">缩小状态，开始播放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大状态，开始播放-1"><span class="nav-number">2.4.</span> <span class="nav-text">放大状态，开始播放</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目开发过程"><span class="nav-number">3.</span> <span class="nav-text">项目开发过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相片显示"><span class="nav-number">3.1.</span> <span class="nav-text">相片显示</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#将BMP图片加入代码"><span class="nav-number">3.1.1.</span> <span class="nav-text">将BMP图片加入代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python代码测试"><span class="nav-number">3.1.2.</span> <span class="nav-text">python代码测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BMP格式解析"><span class="nav-number">3.1.3.</span> <span class="nav-text">BMP格式解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PixelAraay说明"><span class="nav-number">3.1.4.</span> <span class="nav-text">PixelAraay说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BMP文件头"><span class="nav-number">3.1.5.</span> <span class="nav-text">BMP文件头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取PixelArray"><span class="nav-number">3.1.6.</span> <span class="nav-text">获取PixelArray</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取图片的长和宽"><span class="nav-number">3.1.7.</span> <span class="nav-text">获取图片的长和宽</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在LCD上显示图片"><span class="nav-number">3.1.8.</span> <span class="nav-text">在LCD上显示图片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实现图片放大功能"><span class="nav-number">3.1.9.</span> <span class="nav-text">实现图片放大功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图片定时播放"><span class="nav-number">3.2.</span> <span class="nav-text">图片定时播放</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化定时中断"><span class="nav-number">3.2.1.</span> <span class="nav-text">初始化定时中断</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断处理函数"><span class="nav-number">3.2.2.</span> <span class="nav-text">中断处理函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#中断判断"><span class="nav-number">3.2.2.1.</span> <span class="nav-text">中断判断</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#中断处理"><span class="nav-number">3.2.2.2.</span> <span class="nav-text">中断处理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按键功能描述"><span class="nav-number">3.2.3.</span> <span class="nav-text">按键功能描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断处理-1"><span class="nav-number">3.2.4.</span> <span class="nav-text">中断处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BCD转十进制"><span class="nav-number">3.2.5.</span> <span class="nav-text">BCD转十进制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间获取"><span class="nav-number">3.2.6.</span> <span class="nav-text">时间获取</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字体模型"><span class="nav-number">3.2.7.</span> <span class="nav-text">字体模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在LCD上显示时间"><span class="nav-number">3.2.8.</span> <span class="nav-text">在LCD上显示时间</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将显示时间的功能加入定时器中断"><span class="nav-number">3.2.9.</span> <span class="nav-text">将显示时间的功能加入定时器中断</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#经验总结"><span class="nav-number">4.</span> <span class="nav-text">经验总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#消除按键抖动"><span class="nav-number">4.1.</span> <span class="nav-text">消除按键抖动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题描述"><span class="nav-number">4.1.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题原因"><span class="nav-number">4.1.2.</span> <span class="nav-text">问题原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题解决"><span class="nav-number">4.1.3.</span> <span class="nav-text">问题解决</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARM除法操作"><span class="nav-number">4.2.</span> <span class="nav-text">ARM除法操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#问题描述-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题原因-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">问题原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#问题解决-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">问题解决</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目总结"><span class="nav-number">5.</span> <span class="nav-text">项目总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#window"><span class="nav-number">5.1.</span> <span class="nav-text">window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可执行文件的大小限制"><span class="nav-number">5.2.</span> <span class="nav-text">可执行文件的大小限制</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a></div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

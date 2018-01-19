@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="DRAMDRAM状态寄存器首先查看s3c6410的开发者手册，找到DRAM的状态寄存器，如下图所示：  从图中可以看出保存DRAM状态的寄存器为P1MEMSTAT，其访问地址为0x7E001000并且是一个只读寄存器。这个寄存器的高位都是保留部分没有特殊意义。下面对该寄存器各段进行解读：  [31: 9]为保留部分，没有特殊意义。   [8:7]表示s3c6410的DRAM控制器最多能够支持的芯片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DRAM 与NAND flash实验">
+<meta property="og:url" content="http://yoursite.com/2017/12/10/DRAM 与NAND flash实验/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="DRAMDRAM状态寄存器首先查看s3c6410的开发者手册，找到DRAM的状态寄存器，如下图所示：  从图中可以看出保存DRAM状态的寄存器为P1MEMSTAT，其访问地址为0x7E001000并且是一个只读寄存器。这个寄存器的高位都是保留部分没有特殊意义。下面对该寄存器各段进行解读：  [31: 9]为保留部分，没有特殊意义。   [8:7]表示s3c6410的DRAM控制器最多能够支持的芯片">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20上午9.23.51.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20上午9.34.06.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-23%20下午9.45.28.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20下午2.28.38.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20下午2.38.51.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-19%20上午9.23.33.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20下午3.04.03.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-23%20下午7.08.04.png">
+<meta property="og:updated_time" content="2017-12-10T07:38:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DRAM 与NAND flash实验">
+<meta name="twitter:description" content="DRAMDRAM状态寄存器首先查看s3c6410的开发者手册，找到DRAM的状态寄存器，如下图所示：  从图中可以看出保存DRAM状态的寄存器为P1MEMSTAT，其访问地址为0x7E001000并且是一个只读寄存器。这个寄存器的高位都是保留部分没有特殊意义。下面对该寄存器各段进行解读：  [31: 9]为保留部分，没有特殊意义。   [8:7]表示s3c6410的DRAM控制器最多能够支持的芯片">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202017-11-24%20上午9.23.51.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/10/DRAM 与NAND flash实验/"/>
+
+
+
+
+
+  <title>DRAM 与NAND flash实验 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/10/DRAM 与NAND flash实验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DRAM 与NAND flash实验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-10T14:51:14+08:00">
+                2017-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARM裸机开发/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM裸机开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="DRAM"><a href="#DRAM" class="headerlink" title="DRAM"></a>DRAM</h2><h3 id="DRAM状态寄存器"><a href="#DRAM状态寄存器" class="headerlink" title="DRAM状态寄存器"></a>DRAM状态寄存器</h3><p>首先查看s3c6410的开发者手册，找到DRAM的状态寄存器，如下图所示：</p>
+<p><img src="/images/屏幕快照 2017-11-24 上午9.23.51.png" alt="DRAM状态寄存器"></p>
+<p>从图中可以看出保存DRAM状态的寄存器为<code>P1MEMSTAT</code>，其访问地址为<code>0x7E001000</code>并且是一个只读寄存器。这个寄存器的高位都是保留部分没有特殊意义。下面对该寄存器各段进行解读：</p>
+<ul>
+<li>[31: 9]为保留部分，没有特殊意义。</li>
+</ul>
+<ul>
+<li>[8:7]表示s3c6410的DRAM控制器最多能够支持的芯片个数，s3c6410最多能支持两个，所以这个值读取出来应该为01。</li>
+<li>[6:4]表示s3c6410的DRAM控制器能够支持的SDRAM种类。</li>
+<li>[3:2]表示外部内存的宽度</li>
+<li>[1:0]表示DRAM控制器当前所处的状态。</li>
+</ul>
+<p>有了上述信息我们就可以通过解读<code>P1MEMSTAT</code>寄存器的内容来得到DRAM的状态。</p>
+<h3 id="代码编写"><a href="#代码编写" class="headerlink" title="代码编写"></a>代码编写</h3><h4 id="如何获取寄存器的值"><a href="#如何获取寄存器的值" class="headerlink" title="如何获取寄存器的值"></a>如何获取寄存器的值</h4><p>首先我们可以先看一下Tiny6410提供的裸机代码是如何读取寄存器内容的。</p>
+<p>在<code>sdram.c</code>的<code>sdram_init</code>函数中可以找到下面两行代码：<br><img src="/images/屏幕快照 2017-11-24 上午9.34.06.png" alt="Tiny6410裸机代码"></p>
+<p>这部分代码是通过命令使dram控制器进入ready状态以完成最后的初始化。结合前面对<code>P1MEMSTAT</code>的分析可以知道通过读取其[1:0]部分就可以知道控制器是否已经进入ready状态。从<code>while</code>的判断条件可以看到它通过<code>read_val</code>函数来读取<code>P1MEMSTAT</code>寄存器的值。所以我们可以依葫芦画瓢通过同样的方法来获取寄存器的值，从而解析出dram状态。</p>
+<p>当然，由于s3c6410使通过内存地址映射的方式来访问外部设备的，所以也可以直接对<code>0x7E001000</code>解引用的方式来获取这个寄存器的值，其实<code>read_val</code>函数就是对这个过程的封装。</p>
+<h4 id="输出的准备工作"><a href="#输出的准备工作" class="headerlink" title="输出的准备工作"></a>输出的准备工作</h4><p>为了方便后续的输出工作，可以先在<code>uart.c</code>中定义一个<code>puts(char* s)</code>函数用来输出字符串。由于Tiny6410的裸机代码已经提供了<code>putchar</code>函数，所以我们要实现的<code>puts</code>就很简单了，以<code>&#39;\0&#39;</code>为界不断输出就行了。下面是这个函数的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">puts</span><span class="params">(<span class="keyword">char</span>* s)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; s[i] != <span class="number">0</span>; ++i) &#123;</span><br><span class="line">        <span class="built_in">putchar</span>(s[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="P1MEMSTAT的读取与解析"><a href="#P1MEMSTAT的读取与解析" class="headerlink" title="P1MEMSTAT的读取与解析"></a>P1MEMSTAT的读取与解析</h4><p>首先就像先前讨论的一样，通过<code>read_val</code>函数读取<code>P1MEMSTAT</code>的值。</p>
+<p>然后通过位操作获取这个寄存器不同段的值，按照先前讨论的解释将得到的结果解析出来就行了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> dram_status = read_val(P1MEMSTAT);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Controller status</span></span><br><span class="line"><span class="built_in">puts</span>(<span class="string">"Controller status: "</span>);</span><br><span class="line"><span class="keyword">switch</span> (dram_status &amp; <span class="number">0x3</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x0</span>: <span class="built_in">puts</span>(<span class="string">"00 Config"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x1</span>: <span class="built_in">puts</span>(<span class="string">"01 Ready"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x2</span>: <span class="built_in">puts</span>(<span class="string">"10 Parsed"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x3</span>: <span class="built_in">puts</span>(<span class="string">"11 Low-Power"</span>); <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码首先读取<code>P1MEMSTAT</code>寄存器的值，将给值与<code>0x3</code>做与的计算就可以获得该寄存器[1:0]部分的值，参考现前贴出的datasheet对这个部分值进行解读，并输出相应的意义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Memory width</span></span><br><span class="line"><span class="built_in">puts</span>(<span class="string">"\nMemory width: "</span>);</span><br><span class="line"><span class="keyword">switch</span> ((dram_status &gt;&gt; <span class="number">2</span>) &amp; <span class="number">0x3</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x0</span>: <span class="built_in">puts</span>(<span class="string">"00 16-bit"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x1</span>: <span class="built_in">puts</span>(<span class="string">"01 32-bit"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x2</span>: <span class="built_in">puts</span>(<span class="string">"10 reserved"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x3</span>: <span class="built_in">puts</span>(<span class="string">"11 reserved"</span>); <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码先将寄存器的值右移2位，将[3:2]部分移至[1:0]之后再与<code>0x3</code>做与计算，这样就提取出了寄存器中[3:2]部分的值，再按照datasheet中的描述解析这个值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Memory type</span></span><br><span class="line"><span class="built_in">puts</span>(<span class="string">"\nMemory type: "</span>);</span><br><span class="line"><span class="keyword">switch</span> ((dram_status &gt;&gt; <span class="number">4</span>) &amp; <span class="number">0x7</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x4</span>: <span class="built_in">puts</span>(<span class="string">"Any of the following: MSDR SDR MDDR DDr"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>: <span class="built_in">puts</span>(<span class="string">"none"</span>); <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这部分代码将寄存器的值右移4位，将[6:4]部分移至[2:0]之后再与<code>0x7</code>做与计算，这样就提取出了寄存器[6:4]部分的值，再按照datasheet中的描述解析这个值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">puts</span>(<span class="string">"\nMemory chips: "</span>);</span><br><span class="line"><span class="keyword">switch</span> ((dram_status &gt;&gt; <span class="number">7</span>) &amp; <span class="number">0x3</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0x1</span>: <span class="built_in">puts</span>(<span class="string">"01 two chips"</span>); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>: <span class="built_in">puts</span>(<span class="string">"error"</span>); <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这部分代码将寄存器的值右移7位，将[8:7]部分移至[1:0]之后再与<code>0x3</code>做与计算，这样就提取出了寄存器[8:7]部分的值，再按照datasheet中的描述解析这个值。</p>
+<h3 id="实验结果截图"><a href="#实验结果截图" class="headerlink" title="实验结果截图"></a>实验结果截图</h3><p><img src="/images/屏幕快照 2017-11-23 下午9.45.28.png" alt="DRAM状态"></p>
+<p>将上述代码整合在<code>main</code>当中烧入开发板并启动，可以从串口中看到上述四行输出。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>要读取设备的状态首先要找到它的状态寄存器（找到它对应的地址），然后查阅datasheet了解寄存器各段值的意义。在解析的时候各段代码其实都是大同小异的。</p>
+<p>值得注意的是，在<code>main</code>函数的结尾最好加上一个死循环防止<code>main</code>函数退出，否则<code>main</code>函数退出之后会导致开发板无限重启。</p>
+<h2 id="NAND-flash"><a href="#NAND-flash" class="headerlink" title="NAND flash"></a>NAND flash</h2><p>这个实验与上一个实验不太一样，读取DRAM状态的时候只需要把状态寄存器当做内存的一部分读取就好了，不需要考虑时序。但是这个实验需要对NAND flash进行读、写、擦的操作，需要按照时序图做出动作。</p>
+<h3 id="NAND-flash存储结构"><a href="#NAND-flash存储结构" class="headerlink" title="NAND flash存储结构"></a>NAND flash存储结构</h3><p>无论是读、写还是擦，都需要知道目标地址，而目标地址的发送需要按照时序图的标准给出，所以有必要了解一下手上的NAND flash是如何组织存储的。<br><img src="/images/屏幕快照 2017-11-24 下午2.28.38.png" alt="NAND flash结构"></p>
+<p>NAND flash的的地址在逻辑上分为两个部分，列地址和行地址。</p>
+<ul>
+<li>行地址其实就是我们平时所说的页地址，从上图也可以看到，一行表示一页，所以页地址被称为行地址。</li>
+<li>列地址就是页内偏移量，在图中就是一列。</li>
+</ul>
+<p>NAND flash在上述两个逻辑概念之外还用到了块，将若干页并称为一个块，NAND flash的擦除的基本单位就是块。无论是页还是块，它们是如何组成的都可以在相应器件的datasheet中查到。</p>
+<h3 id="读取操作"><a href="#读取操作" class="headerlink" title="读取操作"></a>读取操作</h3><h4 id="读取的时序图"><a href="#读取的时序图" class="headerlink" title="读取的时序图"></a>读取的时序图</h4><p>Tiny6410上的NAND flash使用的是K9GAG08U0E，所以需要按照它提供的时序图进行操作。</p>
+<p>读取操作在Tiny6410提供的裸机程序中已经给出了，我们可以通过这部分代码以及对应的时序图了解如何参照时序图进行代码编写。</p>
+<p><img src="/images/屏幕快照 2017-11-24 下午2.38.51.png" alt="读取操作的时序图"></p>
+<p>这幅图就是K9GAG08U0E的读取操作的时序图，其中它的最后两行对我们而言最重要。图中还有很多其它的量，例如twc, twb等等，这些我们不需要关心，因为在Tiny6410提供的代码里已经做好了这部分的初始化，我们只需要关心如何进行最后两行时序的操作就好了。</p>
+<p>我们要进行的操作集中在上幅时序图的倒数第二行，也就是I/Ox这一行。可以大致的看到要进行读取操作，首先要向指令寄存器发送<code>0x00</code>，然后分5个周期发送读取的地址，随后再向指令寄存器发送<code>0x30</code>，这会看到时序图的最后一行R/B中有一段Busy状态，这是NAND flash开始真正进行读取，我们需要等待直到读取完成，随后我们就可以通过数据寄存器将数据取出。</p>
+<h4 id="读取的代码"><a href="#读取的代码" class="headerlink" title="读取的代码"></a>读取的代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nandll_read_page</span> <span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> *buf, <span class="keyword">unsigned</span> <span class="keyword">long</span> addr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> page_size = <span class="number">2048</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发片选</span></span><br><span class="line">    NAND_ENABLE_CE();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发读命令：0x00</span></span><br><span class="line">    NFCMD_REG = NAND_CMD_READ0;</span><br><span class="line">    <span class="comment">// 发地址</span></span><br><span class="line">    NFADDR_REG = <span class="number">0</span>;</span><br><span class="line">    NFADDR_REG = <span class="number">0</span>;</span><br><span class="line">    NFADDR_REG = (addr) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (addr &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (addr &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    <span class="comment">// 发读命令：0x30</span></span><br><span class="line">    NFCMD_REG = NAND_CMD_READSTART;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待数据</span></span><br><span class="line">    NF_TRANSRnB();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连续读2048个字节</span></span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>; i &lt; page_size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        *buf++ = NFDATA8_REG;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 取消片选</span></span><br><span class="line">    NAND_DISABLE_CE();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这是裸机代码提供的读取操作，将它与上述的时序图分析对应有助于我们继续后面写操作和擦除操作的实现。</p>
+<p>首先可以看到代码通过<code>NAND_ENABLE_CE()</code>进行片选，选中要操作的NAND flash。随后向命令寄存器发送<code>0x00</code>指令。</p>
+<p>然后分5个周期向地址寄存器发送地址，从代码上就表现为5个连续的赋值操作。从时序图可以看到前两个周期应该是列地址即页内偏移量，代码将这两个地址都取为0，这意味着每次读取都是从一页的开头部分开始读取。值得注意的是，这段代码在第三个周期发送行地址的时候并没有进行移位操作，这意味着<code>addr</code>这个变量实际上表示的是页地址，而不是一个完整的地址，否则在第三个周期应该要先将<code>addr</code>右移11bits这样才能取到页地址，而这段代码并没有这样操作，所以<code>addr</code>表示的其实是页地址。</p>
+<p>发送了地址之后，需要向指令寄存器发送<code>0x30</code>，随后NAND flash正式开始读取操作，我们需要等待它完成这个操作，所以通过调用<code>NF_TRANSRnB()</code>不断循环直至状态寄存器的最低位变为1。</p>
+<p>当上述循环结束之后，我们就可以在数据寄存器中读取到我们需要的内容了，由于函数是读取一页内容，所以我们读取2048次数据寄存器。</p>
+<p>一切结束之后取消片选。</p>
+<h3 id="写操作"><a href="#写操作" class="headerlink" title="写操作"></a>写操作</h3><h4 id="写操作的时序图"><a href="#写操作的时序图" class="headerlink" title="写操作的时序图"></a>写操作的时序图</h4><p>有了先前对读取操作的分析，写操作就简单了。首先得到它的时序图：</p>
+<p><img src="/images/屏幕快照 2017-11-19 上午9.23.33.png" alt="写操作的时序图"></p>
+<p>从时序图可以看出，首先向指令寄存器发送<code>0x80</code>然后分5个周期发送地址，随后将要写的数据以字节为单位送入数据寄存器，再向指令寄存器发送<code>0x10</code>这时NAND flash就会开始写入。经过等待之后向指令寄存器发送<code>0x70</code>再通过读取状态寄存器可以知道是否写入成功。</p>
+<h4 id="写操作的代码"><a href="#写操作的代码" class="headerlink" title="写操作的代码"></a>写操作的代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">nand_write</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> *buf, <span class="keyword">unsigned</span> <span class="keyword">long</span> page, <span class="keyword">unsigned</span> <span class="keyword">int</span> len)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> page_size = <span class="number">2048</span>;</span><br><span class="line"></span><br><span class="line">    NAND_ENABLE_CE();</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_SEQIN;</span><br><span class="line"></span><br><span class="line">    NFADDR_REG = <span class="number">0</span>;</span><br><span class="line">    NFADDR_REG = <span class="number">0</span>;</span><br><span class="line">    NFADDR_REG = (page) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (page &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (page &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; ++i) &#123;</span><br><span class="line">        NFDATA8_REG = *buf++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_PAGEPROG;</span><br><span class="line"></span><br><span class="line">    NF_TRANSRnB();</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_STATUS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> status = NFDATA8_REG &amp; <span class="number">0x1</span>;</span><br><span class="line">    NAND_DISABLE_CE();</span><br><span class="line">    <span class="keyword">return</span> status == <span class="number">0</span> ? <span class="number">0</span> : <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按照时序图可以写出上述代码。大致过程与读取操作差不多就不赘述了。</p>
+<h3 id="擦除操作"><a href="#擦除操作" class="headerlink" title="擦除操作"></a>擦除操作</h3><h4 id="擦除操作的时序图"><a href="#擦除操作的时序图" class="headerlink" title="擦除操作的时序图"></a>擦除操作的时序图</h4><p><img src="/images/屏幕快照 2017-11-24 下午3.04.03.png" alt="擦除操作的时序图"></p>
+<p>这个时序图与读、写的类似，不同的地方在于传地址的时候只有三个周期，并且只传入行地址。这是因为擦除的基本单位是块，所以将传入页所在的块一并擦除，这时传入列地址就显得多余了。与写操作类似，操作结束之后可以通过状态寄存器判断是否操作成功。</p>
+<h4 id="擦除操作的代码"><a href="#擦除操作的代码" class="headerlink" title="擦除操作的代码"></a>擦除操作的代码</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">block_erase</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">long</span> page)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> page_size = <span class="number">2048</span>;</span><br><span class="line"></span><br><span class="line">    NAND_ENABLE_CE();</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_ERASE1;</span><br><span class="line"></span><br><span class="line">    NFADDR_REG = (page) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (page &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line">    NFADDR_REG = (page &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xff</span>;</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_ERASE2;</span><br><span class="line"></span><br><span class="line">    NF_TRANSRnB();</span><br><span class="line"></span><br><span class="line">    NFCMD_REG = NAND_CMD_STATUS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> status = NFDATA8_REG &amp; <span class="number">0x1</span>;</span><br><span class="line">    NAND_DISABLE_CE();</span><br><span class="line">    <span class="keyword">return</span> status == <span class="number">0</span> ? <span class="number">0</span> : <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码与读操作类似，不赘述了。</p>
+<h3 id="通过串口输出验证代码"><a href="#通过串口输出验证代码" class="headerlink" title="通过串口输出验证代码"></a>通过串口输出验证代码</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> c;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> buf[<span class="number">2048</span>];</span><br><span class="line">    </span><br><span class="line">    init_uart();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        c = getchar();</span><br><span class="line">        <span class="comment">// putchar(c+1);</span></span><br><span class="line">        <span class="keyword">if</span> (c == <span class="string">'r'</span>) &#123;</span><br><span class="line">            nandll_read_page(buf, <span class="number">10</span>);</span><br><span class="line">            <span class="comment">// puts(buf);</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i) &#123;</span><br><span class="line">                UART0_SendData32(buf[i]);</span><br><span class="line">                <span class="built_in">putchar</span>(<span class="string">' '</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">putchar</span>(<span class="string">'\n'</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">'w'</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; ++i) &#123;</span><br><span class="line">                buf[i] = i + <span class="string">'a'</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> res = nand_write(buf, <span class="number">10</span> , <span class="number">2048</span>);</span><br><span class="line">            <span class="keyword">if</span> (res == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">char</span> *out = <span class="string">"write success\n"</span>;</span><br><span class="line">                <span class="built_in">puts</span>(out);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">char</span> *out = <span class="string">"fail\n"</span>;</span><br><span class="line">                <span class="built_in">puts</span>(out);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c == <span class="string">'e'</span>) &#123;</span><br><span class="line">            <span class="keyword">int</span> res = block_erase(<span class="number">10</span>);</span><br><span class="line">            <span class="keyword">if</span> (res == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">char</span> *out = <span class="string">"erase success\n"</span>;</span><br><span class="line">                <span class="built_in">puts</span>(out);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">char</span> *out = <span class="string">"fail\n"</span>;</span><br><span class="line">                <span class="built_in">puts</span>(out);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">char</span> *out = <span class="string">"receive\n"</span>;</span><br><span class="line">            <span class="built_in">puts</span>(out);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>main</code>中实现了简单的人机交互程序。我们通过向串口传入r, w, e可以分别让开发板执行NAND的读、写、擦除三个操作。其中读操作会将读取出来的数据按16进制输出。写入的数据为<code>a b c d e f g h i j</code>，所以如果成功写入，那么再次读出并输出的应该是上述十个字母的ascii码。三个操作均是对第10页或第10页所在的块进行操作。</p>
+<h3 id="实验结果截图与说明"><a href="#实验结果截图与说明" class="headerlink" title="实验结果截图与说明"></a>实验结果截图与说明</h3><p><img src="/images/屏幕快照 2017-11-23 下午7.08.04.png" alt="UART实验结果"></p>
+<p>首先向开发板发送r，表示读取，由于我们读取的是第10页并且这部分先前并没有写入任何内容所以这部分的数据应该全为1，16进制下即全为0xFF。</p>
+<p>随后发送写指令，串口的输出表明写操作成功。随后再次读区第10页发现内容不在是0xFF，而是从0x61开始的10个连续数字，正如先前所述这10个数字是<code>a b c d e f g h i j</code>十个字母对应的ascii码。</p>
+<p>最后测试的是擦除，NAND flash的擦除就是将整个块的内容全部置为1，所以擦除之后再读取内容应该全部为0xFF。串口最后一行输出证明了这一点。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/08/740-Delete-and-Earn/" rel="next" title="740. Delete and Earn">
+                <i class="fa fa-chevron-left"></i> 740. Delete and Earn
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/10/UART与键盘实验/" rel="prev" title="UART与键盘实验">
+                UART与键盘实验 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="John Doe" />
+          
+            <p class="site-author-name" itemprop="name">John Doe</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Kategorien</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#DRAM"><span class="nav-number">1.</span> <span class="nav-text">DRAM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DRAM状态寄存器"><span class="nav-number">1.1.</span> <span class="nav-text">DRAM状态寄存器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码编写"><span class="nav-number">1.2.</span> <span class="nav-text">代码编写</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何获取寄存器的值"><span class="nav-number">1.2.1.</span> <span class="nav-text">如何获取寄存器的值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出的准备工作"><span class="nav-number">1.2.2.</span> <span class="nav-text">输出的准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#P1MEMSTAT的读取与解析"><span class="nav-number">1.2.3.</span> <span class="nav-text">P1MEMSTAT的读取与解析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果截图"><span class="nav-number">1.3.</span> <span class="nav-text">实验结果截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NAND-flash"><span class="nav-number">2.</span> <span class="nav-text">NAND flash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NAND-flash存储结构"><span class="nav-number">2.1.</span> <span class="nav-text">NAND flash存储结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取操作"><span class="nav-number">2.2.</span> <span class="nav-text">读取操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#读取的时序图"><span class="nav-number">2.2.1.</span> <span class="nav-text">读取的时序图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读取的代码"><span class="nav-number">2.2.2.</span> <span class="nav-text">读取的代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写操作"><span class="nav-number">2.3.</span> <span class="nav-text">写操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写操作的时序图"><span class="nav-number">2.3.1.</span> <span class="nav-text">写操作的时序图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#写操作的代码"><span class="nav-number">2.3.2.</span> <span class="nav-text">写操作的代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#擦除操作"><span class="nav-number">2.4.</span> <span class="nav-text">擦除操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#擦除操作的时序图"><span class="nav-number">2.4.1.</span> <span class="nav-text">擦除操作的时序图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#擦除操作的代码"><span class="nav-number">2.4.2.</span> <span class="nav-text">擦除操作的代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过串口输出验证代码"><span class="nav-number">2.5.</span> <span class="nav-text">通过串口输出验证代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果截图与说明"><span class="nav-number">2.6.</span> <span class="nav-text">实验结果截图与说明</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a></div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

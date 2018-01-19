@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="UART实验波特率为115200Tiny6410提供的裸机代码中已经将相关寄存器的值设置恰当，使得波特率为115200。所以直接编译烧录就行了下面是实验截图：  该图为波特率为115200的测试，可以看到输入ABC得到它们ascii码中下一个字符，即BCD。  当我们将波特率设置为19200时，输入ABC不能得到预期结果。 波特率为19200就像上述提到的，Tiny6410的裸机代码默认的波特率为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UART与键盘实验">
+<meta property="og:url" content="http://yoursite.com/2017/12/10/UART与键盘实验/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="UART实验波特率为115200Tiny6410提供的裸机代码中已经将相关寄存器的值设置恰当，使得波特率为115200。所以直接编译烧录就行了下面是实验截图：  该图为波特率为115200的测试，可以看到输入ABC得到它们ascii码中下一个字符，即BCD。  当我们将波特率设置为19200时，输入ABC不能得到预期结果。 波特率为19200就像上述提到的，Tiny6410的裸机代码默认的波特率为">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.33.50.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.32.28.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午11.20.42.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.33.50.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.32.28.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.38.30.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午8.42.09.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午8.45.56.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午8.49.20.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午8.55.49.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午9.04.49.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-01%20下午9.11.34.png">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0339.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0341.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0342.JPG">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0340.JPG">
+<meta property="og:updated_time" content="2017-12-10T07:58:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="UART与键盘实验">
+<meta name="twitter:description" content="UART实验波特率为115200Tiny6410提供的裸机代码中已经将相关寄存器的值设置恰当，使得波特率为115200。所以直接编译烧录就行了下面是实验截图：  该图为波特率为115200的测试，可以看到输入ABC得到它们ascii码中下一个字符，即BCD。  当我们将波特率设置为19200时，输入ABC不能得到预期结果。 波特率为19200就像上述提到的，Tiny6410的裸机代码默认的波特率为">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202017-11-27%20下午10.33.50.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/10/UART与键盘实验/"/>
+
+
+
+
+
+  <title>UART与键盘实验 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/10/UART与键盘实验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">UART与键盘实验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-10T15:54:24+08:00">
+                2017-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARM裸机开发/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM裸机开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="UART实验"><a href="#UART实验" class="headerlink" title="UART实验"></a>UART实验</h2><h3 id="波特率为115200"><a href="#波特率为115200" class="headerlink" title="波特率为115200"></a>波特率为115200</h3><p>Tiny6410提供的裸机代码中已经将相关寄存器的值设置恰当，使得波特率为115200。所以直接编译烧录就行了下面是实验截图：</p>
+<p><img src="/images/屏幕快照 2017-11-27 下午10.33.50.png" alt="屏幕快照 2017-11-27 下午10.33.50"></p>
+<p>该图为波特率为115200的测试，可以看到输入ABC得到它们ascii码中下一个字符，即BCD。</p>
+<p><img src="/images/屏幕快照 2017-11-27 下午10.32.28.png" alt="屏幕快照 2017-11-27 下午10.32.28"></p>
+<p>当我们将波特率设置为19200时，输入ABC不能得到预期结果。</p>
+<h3 id="波特率为19200"><a href="#波特率为19200" class="headerlink" title="波特率为19200"></a>波特率为19200</h3><p>就像上述提到的，Tiny6410的裸机代码默认的波特率为115200，所以在19200下不能得到正常的结果。为了使其能够在19200中得到正确结果，我们需要改动代码。</p>
+<h4 id="原始代码解读"><a href="#原始代码解读" class="headerlink" title="原始代码解读"></a>原始代码解读</h4><p>在<code>uart.c</code>中，我们可以找到下面这段代码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 3. 设置波特率 */</span></span><br><span class="line"><span class="comment">// DIV_VAL = (PCLK / (bps x 16 ) ) - 1 = (66500000/(115200x16))-1 = 35.08</span></span><br><span class="line"><span class="comment">// DIV_VAL = 35.08 = UBRDIVn + (num of 1’s in UDIVSLOTn)/16 </span></span><br><span class="line">UBRDIV0   = <span class="number">35</span>;</span><br><span class="line">UDIVSLOT0 = <span class="number">0x1</span>;</span><br></pre></td></tr></table></figure>
+<p>从注释中我们就可以看出应该如何设置<code>UBRDIV0</code>和<code>UDIVSLOT0</code>两个寄存器。在初始化的时候<code>PCLK</code>已经设置为<code>66500000</code>，这个值不需要改变。公式中的<code>bps</code>就是波特率，在原始代码中波特率为<code>115200</code>，将上述两值代入第一条公式得到<code>35.08</code>。</p>
+<p>第二条公式可以用来帮助我们得到<code>UBRDIV0</code>和<code>UDIVSLOT0</code>的值。查看s3c6410的datasheet可以找到下面这个表：<img src="/images/屏幕快照 2017-11-27 下午11.20.42.png" alt="屏幕快照 2017-11-27 下午11.20.42"></p>
+<p>从这个表可以看到<code>UDIVSLOT0</code>为16位，所以这个寄存器的值中1的个数至多位16个。<code>(num of 1&#39;s in UDIVSLOTn)/16</code>的值域为$[0, 1]$，所以公式左边的<code>DIV_VAL</code>的值的小数部分就是由<code>(num of 1&#39;s in UDIVSLOTn)/16</code>提供的。相应地，<code>UBRDIVn</code>提供的就是整数部分。</p>
+<p>综上，<code>UBRDIV0</code>的值为35, 而0.08约等于$1/16$所以<code>num of 1&#39;s in UDIVSLOTn</code>取1，所以将<code>UDIVSLOT0</code>设置为1。</p>
+<h4 id="代码修改"><a href="#代码修改" class="headerlink" title="代码修改"></a>代码修改</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 3. 设置波特率 */</span></span><br><span class="line"><span class="comment">// DIV_VAL = (PCLK / (bps x 16 ) ) - 1 = (66500000/(19200x16))-1 = 215.4713</span></span><br><span class="line"><span class="comment">// DIV_VAL = 215.4713 = UBRDIVn + (num of 1’s in UDIVSLOTn)/16 </span></span><br><span class="line">UBRDIV0   = <span class="number">215</span>;</span><br><span class="line">UDIVSLOT0 = <span class="number">0xff</span>;</span><br></pre></td></tr></table></figure>
+<p>按照上述讨论，我们可以将代码改写成这样使得波特率变为<code>19200</code>。将<code>19200</code>代入公式，可以求得<code>DIV_VAL</code>的值为215.47。所以<code>UBRDIV0</code>的值为215.47的整数部分，即215。215.47的小数部分0.47约等于0.5，所以<code>UDIVSLOT0</code>中1的个数应该为8，所以将它的低8位设置为1。这样就完成波特率的修改了。</p>
+<h3 id="实验截图"><a href="#实验截图" class="headerlink" title="实验截图"></a>实验截图</h3><h4 id="波特率为115200-1"><a href="#波特率为115200-1" class="headerlink" title="波特率为115200"></a>波特率为115200</h4><p><img src="/images/屏幕快照 2017-11-27 下午10.33.50.png" alt="屏幕快照 2017-11-27 下午10.33.50"></p>
+<p>将未修改的代码编译烧录，使用串口输入可以看到图中的结果，可以看到此时波特率设置为115200得到了正确的返回结果。</p>
+<p><img src="/images/屏幕快照 2017-11-27 下午10.32.28.png" alt="屏幕快照 2017-11-27 下午10.32.28"></p>
+<p>如果不修改代码，直接将波特率改为19200，那么返回的结果是不正确的。</p>
+<h4 id="波特率为19200-1"><a href="#波特率为19200-1" class="headerlink" title="波特率为19200"></a>波特率为19200</h4><p><img src="/images/屏幕快照 2017-11-27 下午10.38.30.png" alt="屏幕快照 2017-11-27 下午10.38.30"></p>
+<p>将修改后的代码编译烧录，可以看到当波特率为19200时可以得到正确的结果，这证明了刚才的代码修改是正确的。</p>
+<h2 id="键盘实验"><a href="#键盘实验" class="headerlink" title="键盘实验"></a>键盘实验</h2><p>因为这个实验不需要修改代码，所以就读读代码，了解一下原理。。。</p>
+<h3 id="LED亮灭原理"><a href="#LED亮灭原理" class="headerlink" title="LED亮灭原理"></a>LED亮灭原理</h3><p><img src="/images/屏幕快照 2017-12-01 下午8.42.09.png" alt="屏幕快照 2017-12-01 下午8.42.09"></p>
+<p>从这幅电路图中可以看出LED的一端已经连到了电源(VDD_IO)，那么LED的亮灭就由另一端(nLED_n)决定了。如果nLED_n为低电平，那么就有电流通过LED，LED就亮了，反之则灭。<br><img src="/images/屏幕快照 2017-12-01 下午8.45.56.png" alt="屏幕快照 2017-12-01 下午8.45.56"></p>
+<p>从引脚图中可以看到nLED_n对应的端口是GPK4，GPK5，GPK6，GPK7。也就是说，我们可以通过设置这些端口的值来控制LED的亮灭。从s3c6410的datasheet中可以查到下面这些内容。</p>
+<p><img src="/images/屏幕快照 2017-12-01 下午8.49.20.png" alt="屏幕快照 2017-12-01 下午8.49.20"></p>
+<p>GPK是GPKCON0寄存器中的某一段，例如GPK4是GPKCON0[19:16]。将这些位设置为0001，就可以将四个端口设置为输出端口，这样我们就可以通过代码设置这些端口的值，进而就能控制LED的亮灭。当然，将这些端口设置为输出端口还不够，我们还需要知道这么将值输出到这些端口。依然是s3c6410的datasheet，我们可以看到下面这些内容。</p>
+<p><img src="/images/屏幕快照 2017-12-01 下午8.55.49.png" alt="屏幕快照 2017-12-01 下午8.55.49"></p>
+<p>从右边的描述可以看出当上述的端口被设置为输出端口后，我们就可以通过GPKDAT对应的位来设置相应端口的值。例如将GPKDAT[4]设置为1，那么GPK4就被设置为了1，则LED原理图中的nLED_1就被设置为高电平，于是LED1两端都是高平所以就将LED1灭了。</p>
+<h3 id="键盘原理"><a href="#键盘原理" class="headerlink" title="键盘原理"></a>键盘原理</h3><p><img src="/images/屏幕快照 2017-12-01 下午9.04.49.png" alt="屏幕快照 2017-12-01 下午9.04.49"></p>
+<p>我们希望通过键盘的状态来控制LED的亮灭，就需要能够用代码来获取键盘的状态。从原理图可以看出我们可以读取EINTn的值获得键盘状态。当键盘没有按下时，右边的电路断开，EINTn的值高电平；当键盘按下后右边的连上则EINTn为低电平。<img src="/images/屏幕快照 2017-12-01 下午9.11.34.png" alt="屏幕快照 2017-12-01 下午9.11.34"></p>
+<p>从上图可以看到EINTn复用为GPNn（其实这里的复用我不太懂）。所以就像在LED中的讨论一样，我们可以查阅s3c6410的datasheet中GPN相关的内容来写代码。首先将GPNCON中相关位设置为00，就可以将GPNn端口设置为输入端口，我们就可以从GPNDAT相应为来读取这些GPNn端口的值。</p>
+<h3 id="代码解读"><a href="#代码解读" class="headerlink" title="代码解读"></a>代码解读</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> dat = <span class="number">0</span>;</span><br><span class="line">GPKCON0 = <span class="number">0x11110000</span>;			<span class="comment">// 配置引脚GPK4,5,6,7为输出功能</span></span><br><span class="line">GPKDAT = <span class="number">0x000000f0</span>;			<span class="comment">// 所有LED熄灭</span></span><br><span class="line">GPNCON = <span class="number">0</span>;						<span class="comment">// 配置引脚GPN0, 1, 2, 3为输入功能</span></span><br></pre></td></tr></table></figure>
+<p>这部分代码的注释已经说明了语句的作用，跟我们在上面的讨论一致。这里就不再说明了。</p>
+<p>下面是键盘按键判断的一部分</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dat = GPNDAT;</span><br><span class="line"><span class="keyword">if</span> (dat &amp; (<span class="number">1</span> &lt;&lt; <span class="number">0</span>))				<span class="comment">// KEY1被按下，则LED1亮，否则LED1灭</span></span><br><span class="line">  	GPKDAT |= <span class="number">1</span> &lt;&lt; <span class="number">4</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  	GPKDAT &amp;= ~(<span class="number">1</span> &lt;&lt; <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p>其实这部分代码本来也不需要再多做解释，因为跟前面的讨论一样。但是Tiny6410附带的裸机代码中的这段注释有些误人。。。光看代码和注释，我还以为第二行和第三行是用来判断如果KEY1被按下，则LED1亮的。但是就像前面讨论的一样，这段代码其实应该是如果KEY1没有被按下，则LED1灭。也就是说注释中的’否则’和代码中的else正好相反。弄清楚这些，那么提供的裸机代码也就全明白了。</p>
+<h3 id="实验截图-1"><a href="#实验截图-1" class="headerlink" title="实验截图"></a>实验截图</h3><p><img src="/images/IMG_0339.JPG" alt="IMG_0340"><br><img src="/images/IMG_0341.JPG" alt="IMG_0341"><br><img src="/images/IMG_0342.JPG" alt="IMG_0342"><br><img src="/images/IMG_0340.JPG" alt="IMG_0340"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/10/DRAM 与NAND flash实验/" rel="next" title="DRAM 与NAND flash实验">
+                <i class="fa fa-chevron-left"></i> DRAM 与NAND flash实验
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/12/712-Minimum-ASCII-Delete-Sum-for-Two-Strings/" rel="prev" title="712. Minimum ASCII Delete Sum for Two Strings">
+                712. Minimum ASCII Delete Sum for Two Strings <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="John Doe" />
+          
+            <p class="site-author-name" itemprop="name">John Doe</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Kategorien</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#UART实验"><span class="nav-number">1.</span> <span class="nav-text">UART实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#波特率为115200"><span class="nav-number">1.1.</span> <span class="nav-text">波特率为115200</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#波特率为19200"><span class="nav-number">1.2.</span> <span class="nav-text">波特率为19200</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原始代码解读"><span class="nav-number">1.2.1.</span> <span class="nav-text">原始代码解读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码修改"><span class="nav-number">1.2.2.</span> <span class="nav-text">代码修改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验截图"><span class="nav-number">1.3.</span> <span class="nav-text">实验截图</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#波特率为115200-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">波特率为115200</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#波特率为19200-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">波特率为19200</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#键盘实验"><span class="nav-number">2.</span> <span class="nav-text">键盘实验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LED亮灭原理"><span class="nav-number">2.1.</span> <span class="nav-text">LED亮灭原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键盘原理"><span class="nav-number">2.2.</span> <span class="nav-text">键盘原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码解读"><span class="nav-number">2.3.</span> <span class="nav-text">代码解读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验截图-1"><span class="nav-number">2.4.</span> <span class="nav-text">实验截图</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a></div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

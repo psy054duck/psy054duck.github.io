@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="BMP将BMP图片加入代码用数组的形式将BMP图片放入代码中是最简单粗暴的方法。在ftp中有工具可以将BMP转换成C语言数组，但是输出的内容我看不出来是BMP数据（连开头代表BMP的数据都看不到），所以我们自己写了一份python代码实现将BMP转换成C语言数组。同时为了方便最后的期末Project，这份代码还加入了一些额外内容。下面是代码： 123456789101112131415161718">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LCD实验">
+<meta property="og:url" content="http://yoursite.com/2017/12/23/LCD实验/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="BMP将BMP图片加入代码用数组的形式将BMP图片放入代码中是最简单粗暴的方法。在ftp中有工具可以将BMP转换成C语言数组，但是输出的内容我看不出来是BMP数据（连开头代表BMP的数据都看不到），所以我们自己写了一份python代码实现将BMP转换成C语言数组。同时为了方便最后的期末Project，这份代码还加入了一些额外内容。下面是代码： 123456789101112131415161718">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.36.36.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.57.47.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.58.04.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.58.12.png">
+<meta property="og:image" content="http://yoursite.com/images/BMPfileFormat.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午4.34.28.png">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0408.JPG">
+<meta property="og:image" content="http://yoursite.com/images/timg.bmp">
+<meta property="og:updated_time" content="2017-12-23T14:47:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LCD实验">
+<meta name="twitter:description" content="BMP将BMP图片加入代码用数组的形式将BMP图片放入代码中是最简单粗暴的方法。在ftp中有工具可以将BMP转换成C语言数组，但是输出的内容我看不出来是BMP数据（连开头代表BMP的数据都看不到），所以我们自己写了一份python代码实现将BMP转换成C语言数组。同时为了方便最后的期末Project，这份代码还加入了一些额外内容。下面是代码： 123456789101112131415161718">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202017-12-18%20下午2.36.36.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/23/LCD实验/"/>
+
+
+
+
+
+  <title>LCD实验 | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Kategorien
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/23/LCD实验/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LCD实验</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-23T22:33:27+08:00">
+                2017-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">in</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ARM裸机开发/" itemprop="url" rel="index">
+                    <span itemprop="name">ARM裸机开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="BMP"><a href="#BMP" class="headerlink" title="BMP"></a>BMP</h2><h3 id="将BMP图片加入代码"><a href="#将BMP图片加入代码" class="headerlink" title="将BMP图片加入代码"></a>将BMP图片加入代码</h3><p>用数组的形式将BMP图片放入代码中是最简单粗暴的方法。在ftp中有工具可以将BMP转换成C语言数组，但是输出的内容我看不出来是BMP数据（连开头代表BMP的数据都看不到），所以我们自己写了一份python代码实现将BMP转换成C语言数组。同时为了方便最后的期末Project，这份代码还加入了一些额外内容。下面是代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bmp2array</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'images.h'</span>, <span class="string">'w'</span>) <span class="keyword">as</span> fp:</span><br><span class="line">        cnt = <span class="number">0</span></span><br><span class="line">        fp.write(<span class="string">'typedef unsigned char uint8_t;\n'</span>)</span><br><span class="line">        <span class="keyword">for</span> _, _, files <span class="keyword">in</span> os.walk(<span class="string">'images'</span>):</span><br><span class="line">            <span class="keyword">for</span> name <span class="keyword">in</span> files:</span><br><span class="line">                <span class="keyword">with</span> open(os.path.join(<span class="string">'images'</span>, name), <span class="string">'rb'</span>) <span class="keyword">as</span> image:</span><br><span class="line">                    v = memoryview(image.read())</span><br><span class="line">                    fp.write(<span class="string">'uint8_t image%d[] = &#123;\n\t'</span> % cnt)</span><br><span class="line">                    cnt += <span class="number">1</span></span><br><span class="line">                    i = <span class="number">0</span></span><br><span class="line">                    <span class="keyword">for</span> byte <span class="keyword">in</span> v:</span><br><span class="line">                        fp.write(<span class="string">'0x%x, '</span> % byte)</span><br><span class="line">                        i += <span class="number">1</span></span><br><span class="line">                        <span class="keyword">if</span> i % <span class="number">8</span> == <span class="number">0</span>:</span><br><span class="line">                            fp.write(<span class="string">'\n\t'</span>)</span><br><span class="line">                    fp.write(<span class="string">'\n&#125;;\n'</span>)</span><br><span class="line">        fp.write(<span class="string">'void* images[] = &#123;'</span>)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(cnt):</span><br><span class="line">            fp.write(<span class="string">'image%d, '</span> % i)</span><br><span class="line">        fp.write(<span class="string">'&#125;;\n'</span>)</span><br><span class="line">        fp.write(<span class="string">"#define IMAGENUM %d"</span> % cnt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    bmp2array()</span><br></pre></td></tr></table></figure>
+<p>这份代码主要是将image目录下的所有图片转换成C语言数据，并且将内容写入images.h文件中，方便我们的裸机代码包含并引用指定的图片。从代码中可以看出来，任意一张图片转换成数组之后的名字为<code>imageX</code>，其中X为python在遍历images目录时图片被访问的次序，从0开始计数，即第一张图片的变量名是<code>image0</code>，第二张为<code>image1</code>。除此之外，宏定义<code>IMAGENUM</code>代表了图片个数，方便期末Project使用，最后还有一个<code>void*</code>类型的数组，用来保存所有图片数组的地址，即<code>void* images[] = {image0, image1, …}</code>，方便我们在代码里面索引任意图片，这两个功能都是为了期末Project加入的，在本次实验里用不到。</p>
+<h3 id="python代码测试"><a href="#python代码测试" class="headerlink" title="python代码测试"></a>python代码测试</h3><p><img src="/images/屏幕快照 2017-12-18 下午2.36.36.png" alt="屏幕快照 2017-12-18 下午2.36.36"></p>
+<p>将<code>images.py</code>与目录<code>images</code>放在同一目录下，<code>images</code>目录中放入两张图片。运行代码之后在<code>images.py</code>同一目录下会生成一个<code>images.h</code>文件，里面有两个数组<code>image0</code>和<code>image1</code>，以及一个被定义为2的宏定义<code>IMAGENUM</code>，上述两个数组分别为<code>images</code>目录中两张图片的数组形式。下面是这个头文件的部分内容截图：</p>
+<p><img src="/images/屏幕快照 2017-12-18 下午2.57.47.png" alt="屏幕快照 2017-12-18 下午2.57.47"><br><img src="/images/屏幕快照 2017-12-18 下午2.58.04.png" alt="屏幕快照 2017-12-18 下午2.58.04"></p>
+<p><img src="/images/屏幕快照 2017-12-18 下午2.58.12.png" alt="屏幕快照 2017-12-18 下午2.58.12"></p>
+<h3 id="BMP格式解析"><a href="#BMP格式解析" class="headerlink" title="BMP格式解析"></a>BMP格式解析</h3><p>BMP格式在<a href="https://en.wikipedia.org/wiki/BMP_file_format" target="_blank" rel="noopener">维基百科</a>里解释的很详细。下面这张来自维基百科的图片很好的展示了BMP格式的结构，以及各个field代表的意义。</p>
+<p><img src="/images/BMPfileFormat.png" alt="BMPfileFormat"></p>
+<p>图中被我用红色框圈起来的部分是我们在这次实验真正关心的数据。第一个框内的数据表示<code>PixelArray</code>在文件中的偏移量，<code>PixelArray</code>是这个图片真正的RGB数据，我们最终就是使用这部分的数据在LCD上显示图片。<code>PixelArray</code>    的相关内容在后面详细说明。</p>
+<p>第二个框里的数据分别为图片的宽和长。要显示图片，这两个数据显然是很重要的。</p>
+<p>第三个框就是刚才提到的<code>PixelArray</code>，里面存储了图片每个Pixel的RGB值，所以这个部分是最重要的。</p>
+<h3 id="PixelAraay说明"><a href="#PixelAraay说明" class="headerlink" title="PixelAraay说明"></a>PixelAraay说明</h3><blockquote>
+<p>The pixel array is a block of 32-bit DWORDs, that describes the image pixel by pixel. Usually pixels are stored “upside-down” with respect to normal image <a href="https://en.wikipedia.org/wiki/Raster_scan" target="_blank" rel="noopener">raster scan</a> order, starting in the lower left corner, going from left to right, and then row by row from the bottom to the top of the image.</p>
+</blockquote>
+<p>从维基百科的这段话可以知道，在<code>PixelArray</code>中存储的图片是<strong>上下颠倒</strong>的。即这个部分最开始的数据是图片最左下角的数据。因此我们在LCD上生成图片的时候要注意，从左下角开始生成，否则图片会上下颠倒。</p>
+<p>当我们采用24位BMP时，每个Pixel由24位数字决定颜色，RGB三个值，每个值各占8位，范围在<code>0~255</code>。要注意的是这3个8位数据的顺序不是我们常说的R, G, B，而是B, G, R。在解析的时候要注意这个顺序，否则生成的图片会很奇怪。</p>
+<p>从上面解释BMP格式的图片中可以看到，在<code>PixelArray</code>中每一行的末尾都有一些<code>Padding</code>，这个BMP规定了每一行数据长度都要是4个字节的倍数，所以不同的图片<code>padding</code>所占用的字节数不尽相同。百科里给出了每一个数据长度的公式：</p>
+<p>​                                 $$RowSize  = \lfloor {BitsPerPixel \times ImageWidth + 31 \over32} \rfloor \times 4$$</p>
+<p>我们在做解析的时候要注意跳过<code>Padding</code>部分的数据。</p>
+<h2 id="裸机代码"><a href="#裸机代码" class="headerlink" title="裸机代码"></a>裸机代码</h2><h3 id="BMP文件头"><a href="#BMP文件头" class="headerlink" title="BMP文件头"></a>BMP文件头</h3><p>为了索引到BMP格式中的各个数据，有两种方式。一种是自己根据上面的结构图，计算出偏移量然后通过指针运算获得数据。另一种是在代码中按照格式定义好对应的<code>struct</code>，然后通过对<code>struct</code>中数据的索引让编译器自动计算好偏移量以获得数据。根据结构图，我们可以按想下面这样定义BMP文件头的<code>struct</code>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125; __attribute__((packed));</span><br></pre></td></tr></table></figure>
+<p>这份代码中的数据大小都是按照结构图来定义的，没什么好解释的。但是，编译器在给这个结构体分配内存的时候，会进行内存对齐，这会导致编译器计算出来的数据偏移量与我们预期的不同。所以在上述代码的最后一行有<code>__attribute__((packed))</code>，这是编译器提供的特殊指令，可以让编译器严格按照给定的数据大小给这个<code>struct</code>分配内存。我们可以通过下面这段代码看出加上这个指令前后的区别</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header_with_attribute</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125; __attribute__((packed));</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_header</span>&#123;</span></span><br><span class="line">    <span class="keyword">uint16_t</span> signature;</span><br><span class="line">    <span class="keyword">uint32_t</span> file_size;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved1;</span><br><span class="line">    <span class="keyword">uint16_t</span> reserved2;</span><br><span class="line">    <span class="keyword">uint32_t</span> offset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sizeof(file_header_with_attribute) = %u\n"</span>, <span class="keyword">sizeof</span>(struct file_header_with_attribute));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sizeof(file_header) = %u\n"</span>, <span class="keyword">sizeof</span>(struct file_header));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码运行结果如下：</p>
+<p><img src="/images/屏幕快照 2017-12-18 下午4.34.28.png" alt="屏幕快照 2017-12-18 下午4.34.28"></p>
+<p>可以看到，由于内存对齐，如果不加入<code>__attribute__((packed))</code>会导致结构体变为16 bytes，而14 bytes才是我们想要的。</p>
+<h3 id="获取PixelArray"><a href="#获取PixelArray" class="headerlink" title="获取PixelArray"></a>获取PixelArray</h3><p>有了上面的结构体，我们就可以很方便的获得BMP图片的PixelArray地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint8_t</span>* getPixelArray(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">	<span class="keyword">int</span> offset = ((struct file_header*) buffer)-&gt;offset;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">uint8_t</span>*) buffer + offset;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码中<code>buffer</code>中是刚才python代码生成的两个图片数组的任意一个，将其转换成<code>struct file_header*</code>之后，就可以通过索引<code>offset</code>来获得<code>PixelArray</code>的偏移量。然后通过指针运算就可以获得<code>PixelArray</code>的起始地址。</p>
+<h3 id="获取图片的长和宽"><a href="#获取图片的长和宽" class="headerlink" title="获取图片的长和宽"></a>获取图片的长和宽</h3><p>刚才提过，要获取BMP格式中的数据，有两种方法，刚才用了结构体的方法，现在我们用人工计算的方式。在图片宽度这个数据的前面有一个文件头(14 bytes)，和一个DIB头的大小(4 bytes)。所以要找到宽度这个数据，我们就可以通过<code>*((uint8_t*) buffer + 14 + 4)</code>来获得。同理，<code>*((uint8_t*) buffer + 14 + 8)</code>可以用来获取图片的长度。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">uint32_t</span> getWidth(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">    <span class="keyword">return</span> *(<span class="keyword">uint32_t</span>*) ((<span class="keyword">char</span>*) buffer + <span class="number">14</span> + <span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">uint32_t</span> getHeight(<span class="keyword">void</span>* buffer) &#123;</span><br><span class="line">    <span class="keyword">return</span> *(<span class="keyword">uint32_t</span>*) ((<span class="keyword">char</span>*) buffer + <span class="number">14</span> + <span class="number">8</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="在LCD上显示图片"><a href="#在LCD上显示图片" class="headerlink" title="在LCD上显示图片"></a>在LCD上显示图片</h3><p>先上代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">draw_image</span><span class="params">(<span class="keyword">void</span>* buffer)</span> </span>&#123;</span><br><span class="line">	lcd_clear_screen(<span class="number">0xffffff</span>);</span><br><span class="line">	<span class="keyword">size_t</span> rowSize = getRowSize(buffer);</span><br><span class="line">	<span class="keyword">uint32_t</span> width = getWidth(buffer), height = getHeight(buffer);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint8_t</span>* pixelArray = getPixelArray(buffer);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">RGB</span>* <span class="title">color</span> = <span class="title">NULL</span>;</span></span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">int</span> horBegin = WIDTHEIGHT / <span class="number">2</span> - width/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">int</span> verBegin = HEIGHT / <span class="number">2</span> - height/<span class="number">2</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; height; ++i) &#123;</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; width &amp;&amp; j + <span class="number">3</span> &lt; rowSize; ++j) &#123;</span><br><span class="line">			color = (<span class="keyword">void</span>*) (pixelArray + i*rowSize + j*<span class="number">3</span>);</span><br><span class="line">			lcd_draw_pixel(verBegin+height-i<span class="number">-1</span>, horBegin+j, RGB2int(*color));</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首先利用Tiny6410裸机代码提供的<code>lcd_clear_screen</code>函数清屏。然后通过<code>getRowSize</code>按照百科中给出的公式计算出PixelArray每一行的长度。随后获取图片的长宽和PixelArray地址。<code>struct RGB</code>是按照B, G, R顺序定义的结构体。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">RGB</span> &#123;</span></span><br><span class="line">    <span class="keyword">uint8_t</span> B;</span><br><span class="line">    <span class="keyword">uint8_t</span> G;</span><br><span class="line">    <span class="keyword">uint8_t</span> R;</span><br><span class="line">&#125;__attribute__((packed));</span><br></pre></td></tr></table></figure>
+<p><code>(horBegin, verBegin)</code>表示图片左上角的点在屏幕上的坐标，通过代码中的计算可以让图片居中显示。</p>
+<p>后面的两重循环是真正的绘图，首先说明一下<code>lcd_draw_pixel</code>三个参数的意义，前两个参数表示当前所操作像素的坐标，第三个参数表示将这个坐标的像素修改成指定的颜色。其中<code>RGB2int</code>将<code>RGB</code>转换成一个<code>int</code>，代码如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">RGB2int</span><span class="params">(struct RGB color)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> color.R &lt;&lt; <span class="number">16</span> | color.G &lt;&lt; <span class="number">8</span> | color.B;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>继续解释刚才的两重循环，第一层循环遍历每一行没什么好解释的，第二层循环的判断条件为<code>j &lt; width &amp;&amp; j + 3 &lt; rowSize</code>，第一个条件也什么好解释的，第二条件是用来跳过上面提到的<code>Padding</code>的。因为<code>Padding</code>的作用是让一行数据的长度变为4个字节的倍数，所以<code>Padding</code>的大小为0, 1, 2或3。因此如果<code>j + 3 &gt;= rowSize</code>那么说明已经读到了<code>Padding</code>部分，所以我们要跳过这个部分。</p>
+<p>最后在<code>main</code>函数中调用就好了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">  	init_uart();</span><br><span class="line">  	lcd_init();</span><br><span class="line">  	<span class="keyword">void</span>* buffer = (<span class="keyword">void</span>*) image0;</span><br><span class="line">  	draw_image(buffer);</span><br><span class="line">  	<span class="keyword">while</span>(<span class="number">1</span>) &#123;&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/images/IMG_0408.JPG" alt="IMG_0408"></p>
+<p>可以看到LCD上成功显示出了图片，并且与电脑中显示出来的bmp一致</p>
+<p><img src="/images/timg.bmp" alt="timg"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/23/416-Partition-Equal-Subset-Sum/" rel="next" title="416 Partition Equal Subset Sum">
+                <i class="fa fa-chevron-left"></i> 416 Partition Equal Subset Sum
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/23/ARM中断实验/" rel="prev" title="ARM中断实验">
+                ARM中断实验 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="John Doe" />
+          
+            <p class="site-author-name" itemprop="name">John Doe</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">Kategorien</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BMP"><span class="nav-number">1.</span> <span class="nav-text">BMP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#将BMP图片加入代码"><span class="nav-number">1.1.</span> <span class="nav-text">将BMP图片加入代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python代码测试"><span class="nav-number">1.2.</span> <span class="nav-text">python代码测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BMP格式解析"><span class="nav-number">1.3.</span> <span class="nav-text">BMP格式解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PixelAraay说明"><span class="nav-number">1.4.</span> <span class="nav-text">PixelAraay说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#裸机代码"><span class="nav-number">2.</span> <span class="nav-text">裸机代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BMP文件头"><span class="nav-number">2.1.</span> <span class="nav-text">BMP文件头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取PixelArray"><span class="nav-number">2.2.</span> <span class="nav-text">获取PixelArray</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获取图片的长和宽"><span class="nav-number">2.3.</span> <span class="nav-text">获取图片的长和宽</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在LCD上显示图片"><span class="nav-number">2.4.</span> <span class="nav-text">在LCD上显示图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">2.5.</span> <span class="nav-text">实验结果</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a></div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
