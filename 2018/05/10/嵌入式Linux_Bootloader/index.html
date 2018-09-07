@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="嵌入式Linux的Bootloader的概述一个程序要正常运行必须有多个硬件配合，即使程序简单如hello world。当开发板刚上电时，许多硬件都处于不能使用的状态，要使用这些硬件就必须对它们进行初始化，而这就是Bootloader的任务之一，这部分因代码通常是用汇编语言写成的。除此之外，开发板要运行程序(不论是裸机代码还是操作系统)就必须能够从存储设备中(nand flash等)将要执行的程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式Linux_Bootloader">
+<meta property="og:url" content="http://yoursite.com/2018/05/10/嵌入式Linux_Bootloader/index.html">
+<meta property="og:site_name" content="Psyduck">
+<meta property="og:description" content="嵌入式Linux的Bootloader的概述一个程序要正常运行必须有多个硬件配合，即使程序简单如hello world。当开发板刚上电时，许多硬件都处于不能使用的状态，要使用这些硬件就必须对它们进行初始化，而这就是Bootloader的任务之一，这部分因代码通常是用汇编语言写成的。除此之外，开发板要运行程序(不论是裸机代码还是操作系统)就必须能够从存储设备中(nand flash等)将要执行的程序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.36.45.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.41.02.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.51.42.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午8.11.15.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午8.13.08.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.00.00.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.00.22.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.00.33.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.05.17.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.05.42.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午8.34.37.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.10.15.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-08%20下午1.44.41.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-10%20上午12.00.32.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-10%20上午12.15.19.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-10%20上午12.26.02.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-10%20上午12.39.34.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.11.42.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.11.51.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午6.29.52.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午9.37.38.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午10.01.47.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午10.26.56.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午10.34.51.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午10.39.32.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-05-09%20下午11.22.20.png">
+<meta property="og:updated_time" content="2018-09-07T05:06:28.082Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="嵌入式Linux_Bootloader">
+<meta name="twitter:description" content="嵌入式Linux的Bootloader的概述一个程序要正常运行必须有多个硬件配合，即使程序简单如hello world。当开发板刚上电时，许多硬件都处于不能使用的状态，要使用这些硬件就必须对它们进行初始化，而这就是Bootloader的任务之一，这部分因代码通常是用汇编语言写成的。除此之外，开发板要运行程序(不论是裸机代码还是操作系统)就必须能够从存储设备中(nand flash等)将要执行的程序">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202018-05-07%20下午7.36.45.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/10/嵌入式Linux_Bootloader/"/>
+
+
+
+
+
+  <title>嵌入式Linux_Bootloader | Psyduck</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Psyduck</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/10/嵌入式Linux_Bootloader/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">嵌入式Linux_Bootloader</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-10T13:06:14+08:00">
+                2018-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="嵌入式Linux的Bootloader的概述"><a href="#嵌入式Linux的Bootloader的概述" class="headerlink" title="嵌入式Linux的Bootloader的概述"></a>嵌入式Linux的Bootloader的概述</h2><p>一个程序要正常运行必须有多个硬件配合，即使程序简单如hello world。当开发板刚上电时，许多硬件都处于不能使用的状态，要使用这些硬件就必须对它们进行初始化，而这就是Bootloader的任务之一，这部分因代码通常是用汇编语言写成的。除此之外，开发板要运行程序(不论是裸机代码还是操作系统)就必须能够从存储设备中(nand flash等)将要执行的程序载入到ram当中并将cpu的控制权交给载入的程序，这就是bootloader最重要的任务。</p>
+<p>大部分处理器在刚上电的时候都会默认执行某一预定义地址的指令。有了这些预先知晓的信息，Bootloader就可以在刚上电的时候获得cpu的控制权，随后进行初始化与程序载入。</p>
+<p>在PC中，与bootloader类似的程序是BIOS，但是BIOS的代码在载入程序后依然存在，而嵌入式Bootloader通常在载入程序之后就会被其它内容覆盖。</p>
+<h2 id="嵌入式Linux的常见Booloader简介"><a href="#嵌入式Linux的常见Booloader简介" class="headerlink" title="嵌入式Linux的常见Booloader简介"></a>嵌入式Linux的常见Booloader简介</h2><h3 id="vivi"><a href="#vivi" class="headerlink" title="vivi"></a>vivi</h3><p>vivi是由mizi公司设计为ARM处理器系列设计支持Nand flash启动的boot loader。它由如下作用:</p>
+<ol>
+<li>把内核从flash复制到ram，然后启动它</li>
+<li>初始化硬件</li>
+<li>下载程序并写入flash（一般通过串口或者网口先把内核下载到ram中，然后写入到flash</li>
+<li>检测目标板硬件的好坏</li>
+</ol>
+<p>vivi有两种模式。autoboot模式是默认的模式，在这个模式下，vivi会在一定延时后自动启动linux内核。另一个中是prompt模式，在这个模式下，用户可以使用一个命令让vivi做相应的事。</p>
+<h3 id="RedBoot"><a href="#RedBoot" class="headerlink" title="RedBoot"></a>RedBoot</h3><p>RedBoot使用eCos实时操作系统硬件抽象层为嵌入式系统提供自启固件，同时RedBoot是开源的。</p>
+<p>RedBoot允许通过串口或以太网下载并执行嵌入式应用，包括嵌入式linux和eCos应用。它提供与GDB结合的debug功能。同时它也提供交互的命令行界面，允许通过命令行来管理flash镜像，镜像下载，RedBoot配置等。</p>
+<h3 id="Blob"><a href="#Blob" class="headerlink" title="Blob"></a>Blob</h3><p>Blob有以下功能：</p>
+<ol>
+<li>初始化硬件</li>
+<li>启动linux内核并为它提供一个虚拟盘</li>
+<li>下载内核或虚拟盘</li>
+<li>将刚下载的内核或虚拟盘写入flash</li>
+<li>决定内存布局</li>
+<li>为内核提供一个命令行</li>
+</ol>
+<h3 id="U-boot"><a href="#U-boot" class="headerlink" title="U-boot"></a>U-boot</h3><p>U-Boot从FADSROM、8xxROM、PPCBOOT逐步发展演化而来。其源码目录、编译形式与Linux内核很相似，事实上，不少U-Boot源码就是根据相应的Linux内核源程序进行简化而形成的，尤其是一些设备的驱动程序，这从U-Boot源码的注释中能体现这一点。</p>
+<p>通常bootloader是针对特定的架构，但是U-boot支持许多计算机架构，如68k, ARM, MIPS, x86等。</p>
+<p>U-boot可以通过串口运行命令行界面。通过命令，用户可以载入并启动内核，并且可以改遍默认参数。同时，使用命令可以读取设备信息，读写flash，通过串口或网络下载文件，操作设备树等。</p>
+<h2 id="嵌入式Linux的Bootloader的移植简介"><a href="#嵌入式Linux的Bootloader的移植简介" class="headerlink" title="嵌入式Linux的Bootloader的移植简介"></a>嵌入式Linux的Bootloader的移植简介</h2><p>下面介绍Uboot中的命令添加与删除。</p>
+<h3 id="内置命令的添加与删除"><a href="#内置命令的添加与删除" class="headerlink" title="内置命令的添加与删除"></a>内置命令的添加与删除</h3><p>Uboot自身已经实现了大量的Monitor command，要将这些功能添加到编译好的uboot.bin当中我们只需要修改对应的配置文件就好。下面以ping命令的添加与删除为例，来演示如何增删uboot自身已经实现的命令。</p>
+<h4 id="ping命令的添加与删除"><a href="#ping命令的添加与删除" class="headerlink" title="ping命令的添加与删除"></a>ping命令的添加与删除</h4><p>Tiny6410提供的uboot版本比较旧，与现在的uboot文件结构不太相同，所以后面提到的文件有可能与s4418不同。s4418的文件结构与内容和新版本的uboot基本相同，tiny6410的版本已经是很老的了。</p>
+<p>以下提及文件目录的部分中，<code>$uboot</code>表示uboot代码的根目录。</p>
+<p>在<code>$uboot/inlcude/cmd_confdefs.h</code> 中列出了uboot提供的所有命令，下面是代码的部分截图：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.36.45.png" alt="屏幕快照 2018-05-07 下午7.36.45"></p>
+<p>如果是s4418的板子，那么这个文件为<code>$uboot/include/config_cmd_all.h</code>：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.41.02.png" alt="屏幕快照 2018-05-07 下午7.41.02"></p>
+<p>两个版本使用的宏定义的格式不一样，但是表示的命令是一样的。在Tiny6410中，一条命令宏定义的格式为<code>CFG_CMD_XXXX</code>而s4418的为<code>CONFIG_CMD_XXXX</code>。</p>
+<p>要删除命令有两种方法，一种是在<code>$uboot/include/cmd_confdefs.h</code>中将相应的命令删除，要删除ping命令，可以像下图一样，将<code>CFG_CMD_PING</code>宏定义注释掉。</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.51.42.png" alt="屏幕快照 2018-05-07 下午7.51.42"></p>
+<p>这种做法是无论为哪个开发板生成<code>uboot.bin</code>，这份uboot中都不会包含被删除的命令。</p>
+<p>另一种做法是针对特定的开发板删除指定命令。</p>
+<p>在<code>$uboot/include/configs</code>文件夹中，有一系列开发板对应的头文件，我们用的Tiny6410与mini6410共用一个头文件<code>$uboot/include/configs/mini6410.h</code> 从这个头文件中可以看到它包含了刚才提到的<code>cmd_confdefs.h</code>文件：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午8.11.15.png" alt="屏幕快照 2018-05-07 下午8.11.15"></p>
+<p>从这里可以看出为什么在<code>cmd_confdefs.h</code>文件中删除命令会影响到所有开发板，是因为它们都包含了这个文件。要将tiny6410的板子中的ping命令删除而不影响其它板子，我们只需要对<code>mini6410.h</code>文件做出修改即可。uboot是根据是否宏定义了相应命令来判断是否将命令添加到最终的制品当中，而<code>mini6410.h</code>包含了<code>cmd_confdefs.h</code>文件所以所有命令的宏定义都被包含了。要删除ping命令我们需要将对应的宏定义删除。</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午8.13.08.png" alt="屏幕快照 2018-05-07 下午8.13.08"></p>
+<p>注意，<code>#undef CFG_CMD_PING</code>一定要写在<code>#include &lt;cmd_confdefs.h&gt;</code>的下面，否则无法用这条命令将<code>cmd_confdefs.h</code>中的宏定义删除。</p>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h4><p>将编译生成的uboot.bin文件烧写到开发板上，接上串口并开机，可以在minicom中看到图中的输出:</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.00.00.png" alt="屏幕快照 2018-05-07 下午7.00.00"></p>
+<p>这是uboot的菜单栏，要验证我们是否真的删除了ping命令，需要进入shell中实际执行试试。所以在这个界面中我们选择q，进入shell。此时可以看到命令提示符：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.00.22.png" alt="屏幕快照 2018-05-07 下午7.00.22"></p>
+<p>这就是uboot的shell了。此时输入ping可以看到报错，这是个未知命令：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.00.33.png" alt="屏幕快照 2018-05-07 下午7.00.33"></p>
+<p>输入help可以发现确实找不到ping。</p>
+<p>如果我们将未修改的uboot代码编译并烧写进开发板，那么输入ping应该会有图中的内容：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.05.17.png" alt="屏幕快照 2018-05-07 下午7.05.17"></p>
+<p>并且在help中可以看到ping：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.05.42.png" alt="屏幕快照 2018-05-07 下午7.05.42"></p>
+<h3 id="自定义命令的添加"><a href="#自定义命令的添加" class="headerlink" title="自定义命令的添加"></a>自定义命令的添加</h3><p>刚才对代码的修改是对uboot已经实现好的命令进行添加或删除。除了可以操作已实现的命令之外，我们还可以将自己写的命令添加到uboot当中。</p>
+<p>uboot将所有命令的代码都放在了<code>$uboot/common</code>文件夹中，并且文件名均为<code>cmd_XXXX.c</code>。我们刚才操作的ping命令就在<code>cmd_net.c</code>当中：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午8.34.37.png" alt="屏幕快照 2018-05-07 下午8.34.37"></p>
+<p>从图中可以看出，一条命令由两个部分组成，一个是函数<code>do_xxxx</code>，这个函数是我们在shell中敲入命令后真正执行的代码。随后是用宏定义<code>U_BOOT_CMD</code>将实现的命令注册进命令列表当中。这个宏定义共有6个参数。</p>
+<ol>
+<li>命令的名称，在shell中输入这个字符串就可以启动该命令。</li>
+<li>这个命令最多可接受多少个参数</li>
+<li>这个命令是否会重复执行（这里的重复是指如果上一条执行的命令就是该命令，那么按下回车会重复执行一次这条命令）</li>
+<li>这条命令的执行函数，这个函数就是前面所说的<code>do_xxxx</code>函数</li>
+<li>详细命令说明</li>
+<li>简要的命令说明</li>
+</ol>
+<p>了解这些就足够我们实现自己的命令了。</p>
+<p>在<code>$uboot/common</code>文件夹中新建一个<code>hello.c</code>文件。在这个文件中输入图中代码：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.10.15.png" alt="屏幕快照 2018-05-07 下午7.10.15"></p>
+<p>这条命令很简单，它的作用是在shell中输入命令<code>hello</code>，屏幕会输出一句<code>Hello, world!</code>。</p>
+<p>除了实现这个文件之外，我们还需要在<code>makefile</code>中将这条命令编译生成的<code>.o</code>文件添加到<code>OBJS</code>当中，这样最终生成的<code>uboot.bin</code>中才会含有这条命令。这里说的<code>makefile</code>是指<code>$uboot/common</code>目录下的<code>makefile</code>文件，在图中指示的位置添加上<code>hello.o</code>：</p>
+<p><img src="/images/屏幕快照 2018-05-08 下午1.44.41.png" alt="屏幕快照 2018-05-08 下午1.44.41"></p>
+<h4 id="理解U-BOOT-CMD"><a href="#理解U-BOOT-CMD" class="headerlink" title="理解U_BOOT_CMD"></a>理解U_BOOT_CMD</h4><p>该部分Tiny6410与S4418不同，但原理类似，下面以Tiny6410为例。</p>
+<p>在上面自定义命令时，我们使用<code>U_BOOT_CMD</code>宏定义将命令放入命令列表当中。在这一小节我们深入理解这个宏定义，并由此了解这些命令是如何存储以及调用的。</p>
+<p><img src="/images/屏幕快照 2018-05-10 上午12.00.32.png" alt="屏幕快照 2018-05-10 上午12.00.32"></p>
+<p>上图是在<code>$uboot/include/command.h</code>中宏定义的<code>U_BOOT_CMD</code>首先解释一些宏定义的特殊用法。</p>
+<p>图中的<code>__u_boot_cmd##name</code>处在变量名的位置，显然在C语言当中<code>#</code>是不能出现在变量名当中的。这里的<code>##name</code>是宏定义的特殊用法，在<code>U_BOOT_CMD</code>参数中有一个<code>name</code>，于是这里的<code>##name</code>就会按照真实传入的<code>name</code>值展开。后面的<code>#name</code>也是类似的特殊用法，它会按照真实传入的<code>name</code>参数展开成字符串形式。以上面的<strong>hello</strong>命令为例<code>U_BOOT_CMD(hello, 2, 0, do_hello, &quot;xxx&quot;, &quot;xxx&quot;)</code>会被展开成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmd_tbl_t</span> __u_boot_cmd_hello Struct_Section = &#123;<span class="string">"hello"</span>, <span class="number">2</span>, <span class="number">0</span>, do_hello, <span class="string">"xxx"</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>接着说明<code>Struct_Section</code>宏命令，这个宏命令与uboot存储命令的方式有关。</p>
+<p><img src="/images/屏幕快照 2018-05-10 上午12.15.19.png" alt="屏幕快照 2018-05-10 上午12.15.19"></p>
+<p>在同一个<code>$uboot/include/command.h</code>文件中可以看到上面的宏定义。这个宏定义的作用是为编译出来的命令提供编译属性。这里指定了两个属性，第一个是<code>unused</code>，拥有这个属性的变量即使在程序当中没有被使用过，gcc也不会报warning。搜索所有uboot代码，我们会发现<code>__u_boot_cmd_ping</code>之类的变量确实没有被使用过。这个现象的原因在后面会说明。第二个指定的属性是<code>section</code>，这个属性指定函数或变量被放在指定的段中，在这里这个段就是<code>.u_boot_cmd</code>。所以所有uboot命令都会被放在这个段中。</p>
+<p>在<code>$uboot/board/samsung/smdk6410</code>中我们可以找到Tiny6410使用的uboot链接脚本<code>u-boot.lds</code>。在这个脚本中我们可以找到下图中的内容：</p>
+<p><img src="/images/屏幕快照 2018-05-10 上午12.26.02.png" alt="屏幕快照 2018-05-10 上午12.26.02"></p>
+<p>从部分可以看到，在链接时，所有<code>.u_boot_cmd</code>段的内容最终都汇总在了统一的<code>.u_boot_cmd</code>段，并且由<code>__u_boot_cmd_start</code>和<code>__u_boot_cmd_end</code>分别指示这个段的开头与结尾。也就是说最终所有的命令都被放在了一起，形成了一个<code>cmd_tbl_t</code>类型的数组，这个数组可以通过<code>__u_boot_cmd_start</code>访问。</p>
+<p><img src="/images/屏幕快照 2018-05-10 上午12.39.34.png" alt="屏幕快照 2018-05-10 上午12.39.34"></p>
+<p>上图是<code>$uboot/common/command.c</code>中的<code>find_cmd</code>的一部分。在uboot的shell中输入命令，程序需要在刚才的数组中查找相应的命令，这个查找的过程就是由<code>find_cmd</code>完成的。图中展示的就是查找使用的循环，从这个循环就可以看出uboot是通过<code>__u_boot_cmd_start</code>和<code>__u_boot_cmd_end</code>遍历所有命令的。这就是为什么前面定义出来的<code>__u_boot_cmd_ping</code>之类的具体命令对应的变量名从未被使用过的原因。</p>
+<h4 id="实验结果-1"><a href="#实验结果-1" class="headerlink" title="实验结果"></a>实验结果</h4><p>将添加了自定义命令<code>hello</code>的uboot代码编译成<code>uboot.bin</code>后烧写进开发板，启动并进入shell。输入<code>help</code>可以看到自定义的命令<code>hello</code>出现在了列表当中：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.11.42.png" alt="屏幕快照 2018-05-07 下午7.11.42"></p>
+<p>在shell中输入<code>hello</code>可以看到屏幕输出了<code>Hello, world!</code>字符串：</p>
+<p><img src="/images/屏幕快照 2018-05-07 下午7.11.51.png" alt="屏幕快照 2018-05-07 下午7.11.51"></p>
+<h2 id="嵌入式Linux的Bootloader-Uboot的分析"><a href="#嵌入式Linux的Bootloader-Uboot的分析" class="headerlink" title="嵌入式Linux的Bootloader-Uboot的分析"></a>嵌入式Linux的Bootloader-Uboot的分析</h2><h3 id="Nand-flash启动原理"><a href="#Nand-flash启动原理" class="headerlink" title="Nand flash启动原理"></a>Nand flash启动原理</h3><p>Nand flash启动的流程在上学期的裸机开发部分就已经学习过了。</p>
+<p>以Tiny6410为例，如果我们选择Nand flash启动，那么在硬件上电后它会做下面这些事情：</p>
+<ol>
+<li>将Nand flash前8kB的内容拷贝到SRAM (stepping stone)</li>
+<li>程序跳转到SRAM上执行上一步拷贝的程序</li>
+</ol>
+<p>无论是裸机代码还是bootloader，只要选择了Nand flash启动，那么上述步骤一定会执行。对于uboot而言，这个过程有一个不足，那就是uboot生成的二进制文件比8KB大。这个问题在学习裸机代码的时候也提出过，要解决这个问题，我们必须把uboot的启动分为两个部分。第一个部分完成必要的硬件初始化，并且将第二部分的uboot代码复制到sdram并跳转到sdram上执行完整的uboot代码。</p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><h4 id="链接脚本-u-boot-lds"><a href="#链接脚本-u-boot-lds" class="headerlink" title="链接脚本 u-boot.lds"></a>链接脚本 u-boot.lds</h4><p>上面已经说明了uboot要分两段被载入，并且第一段的载入是由系统自动执行的，不需要程序员介入。但是这还有一个问题，系统自动载入的内容是Nand flash最开始的8KB，也就是说我们必须保证这一段的内容就是uboot的第一段内容。要保证这个就需要我们在链接生成<code>uboot.bin</code>文件时将uboot第一段内容链接在最开始的地方。这个工作由链接脚本完成。</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午6.29.52.png" alt="屏幕快照 2018-05-09 下午6.29.52"></p>
+<p>从<code>u-boot.lds</code>文件可以看出，<code>start.o</code>, <code>cpu_init.o</code>等文件被链接在了开始部分，而在Tiny6410的uboot中<code>start.o</code>就是完成第一阶段的代码。这个文件由<code>start.S</code>文件编译生成。</p>
+<h4 id="start-S"><a href="#start-S" class="headerlink" title="start.S"></a>start.S</h4><p><img src="/images/屏幕快照 2018-05-09 下午9.37.38.png" alt="屏幕快照 2018-05-09 下午9.37.38"></p>
+<p>代码入口的第一句就是一个跳转语句，跳转到reset标签所在位置。reset部分的代码首先将当前模式切换为supervisor模式(svc)，然后进行一系列必要的初始化，最后将nand flash中的uboot代码载入ram当中。这里我们只关心将uboot载入的部分。</p>
+<p>uboot通过条件编译可以得到不同方式启动的uboot代码，图中是通过nand flash启动的部分：</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午10.01.47.png" alt="屏幕快照 2018-05-09 下午10.01.47"></p>
+<p>在这里可以看到如果我们宏定义了<code>CONFIG_BOOT_NAND</code>，那么程序会进入<code>copy_from_nand</code>标签，这部分代码主要做了两件事，第一件事设置好栈指针然后调用C语言函数<code>copy_uboot_to_ram</code>将nand flash中的uboot代码复制到<code>CFG_PHY_UBOOT_BASE</code>规定的位置，第二件事是检查<code>copy_uboot_to_ram</code>函数是否成功执行以及uboot代码是否被复制到了指定的位置。</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午10.26.56.png" alt="屏幕快照 2018-05-09 下午10.26.56"></p>
+<p>上图中就是设置栈指针然后调用<code>copy_uboot_to_ram</code>。这个函数在<code>nand_cp.c</code>中实现，它的操作在后面的<strong>nand_cp.c</strong>小节中说明。</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午10.34.51.png" alt="屏幕快照 2018-05-09 下午10.34.51"></p>
+<p>上图所展示的代码是<code>copy_from_nand</code>做的最后的事情。arm中函数的返回值存储在<code>r0</code>寄存器当中，所以在调用完<code>copy_uboot_to_ram</code>之后，判断它的返回值是否为0，由此判断该函数是否正常运行。如果没有正常运行则跳转到<code>copy_failed</code>，这个标签的内容与后面的<code>compare_failed</code>一样都是一个死循环。<code>copy_uboot_to_ram</code>正常运行，则比较调用之后<code>0x0c000000</code>和<code>_TEXT_PHY_BASE</code>两处的内容是否相同。</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午10.39.32.png" alt="屏幕快照 2018-05-09 下午10.39.32"></p>
+<p>从s3c6410的用户手册中可以查到<code>0x0c000000</code>就是前面提到的<strong>stepping stone</strong>。系统自动从nand flash中读取的内容就是存放到这里。而<code>_TEXT_PHY_BASE</code>是在文件开始部分的宏定义变量，这个值就是<code>CFG_PHY_UBOOT_BASE</code>，也就是代码规定的uboot需要被复制到的地方。所以比较这两个地方的值就可以判断uboot是否成功的被复制到了指定地点。最后就是从<code>copy_from_nand</code>中返回了。</p>
+<p><code>start.S</code>最后的部分就是在<code>after_copy</code>，<code>clear_bss</code>和<code>clbss_l</code>中做最后的设置。然后调用<code>_start_armboot</code>函数进行正常的uboot启动。</p>
+<h4 id="nand-cp-c"><a href="#nand-cp-c" class="headerlink" title="nand_cp.c"></a>nand_cp.c</h4><p>回顾上学期学习裸机开发时，我们自己实现过Nand flash的读、写、擦操作。<code>nand_cp.c</code>中定义的函数本质上就是上学期我们写过的读取操作，代码完全相同。<code>copy_uboot_to_ram</code>函数就是调用这些写好的读取函数完成从nand flash中复制uboot至指定位置。</p>
+<p><img src="/images/屏幕快照 2018-05-09 下午11.22.20.png" alt="屏幕快照 2018-05-09 下午11.22.20"></p>
+<p><code>copy_uboot_to_ram</code>函数调用了<code>nandll_read_blocks</code>完成复制工作。这个函数的实现与上学期的内容相同所以不做说明。这个函数调用将nand flash开头部分的240KB内容复制到<code>CFG_PHY_UBOOT_BASE</code>即将uboot完整的复制到指定位置。</p>
+<h2 id="可以参考的资料"><a href="#可以参考的资料" class="headerlink" title="可以参考的资料"></a>可以参考的资料</h2><ol>
+<li>Building.Embedded.Linux.Systems，2nd，by OReilly.</li>
+<li>Embedded Linux Primer: A Practical, Real-World Approach，by Prentice Hall</li>
+<li>教材的第七章</li>
+<li>两个嵌入式Linux的Survey文件</li>
+<li><a href="https://blog.csdn.net/itxiebo/article/details/50991049" target="_blank" rel="noopener">u-boot分析 七</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/19/Project/" rel="next" title="嵌入式软件开发期末project">
+                <i class="fa fa-chevron-left"></i> 嵌入式软件开发期末project
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/09/嵌入式Linux的文件系统/" rel="prev" title="嵌入式Linux的文件系统">
+                嵌入式Linux的文件系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="Psyduck" />
+          
+            <p class="site-author-name" itemprop="name">Psyduck</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的Bootloader的概述"><span class="nav-number">1.</span> <span class="nav-text">嵌入式Linux的Bootloader的概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的常见Booloader简介"><span class="nav-number">2.</span> <span class="nav-text">嵌入式Linux的常见Booloader简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#vivi"><span class="nav-number">2.1.</span> <span class="nav-text">vivi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RedBoot"><span class="nav-number">2.2.</span> <span class="nav-text">RedBoot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Blob"><span class="nav-number">2.3.</span> <span class="nav-text">Blob</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#U-boot"><span class="nav-number">2.4.</span> <span class="nav-text">U-boot</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的Bootloader的移植简介"><span class="nav-number">3.</span> <span class="nav-text">嵌入式Linux的Bootloader的移植简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内置命令的添加与删除"><span class="nav-number">3.1.</span> <span class="nav-text">内置命令的添加与删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ping命令的添加与删除"><span class="nav-number">3.1.1.</span> <span class="nav-text">ping命令的添加与删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果"><span class="nav-number">3.1.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义命令的添加"><span class="nav-number">3.2.</span> <span class="nav-text">自定义命令的添加</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#理解U-BOOT-CMD"><span class="nav-number">3.2.1.</span> <span class="nav-text">理解U_BOOT_CMD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实验结果-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的Bootloader-Uboot的分析"><span class="nav-number">4.</span> <span class="nav-text">嵌入式Linux的Bootloader-Uboot的分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Nand-flash启动原理"><span class="nav-number">4.1.</span> <span class="nav-text">Nand flash启动原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-number">4.2.</span> <span class="nav-text">代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链接脚本-u-boot-lds"><span class="nav-number">4.2.1.</span> <span class="nav-text">链接脚本 u-boot.lds</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#start-S"><span class="nav-number">4.2.2.</span> <span class="nav-text">start.S</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nand-cp-c"><span class="nav-number">4.2.3.</span> <span class="nav-text">nand_cp.c</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以参考的资料"><span class="nav-number">5.</span> <span class="nav-text">可以参考的资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Psyduck</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

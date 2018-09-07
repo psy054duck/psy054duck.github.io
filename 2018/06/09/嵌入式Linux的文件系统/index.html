@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="嵌入式Linux文件系统的概述文件系统的选择是嵌入式开发人员最重要的决策之一。不同的文件系统侧重的功能不同，有些文件系统注重效率，有些注重文件大小，还有一些注重数据恢复。 PartitionsPartitions是对物理设备的逻辑划分，Partition根据不同的类型其数据也会根据对应类型的条款进行组织。一个物理设备可以只有一个Partition，也可以有多个。将物理设备划分为若干个Partiti">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式Linux的文件系统">
+<meta property="og:url" content="http://yoursite.com/2018/06/09/嵌入式Linux的文件系统/index.html">
+<meta property="og:site_name" content="Psyduck">
+<meta property="og:description" content="嵌入式Linux文件系统的概述文件系统的选择是嵌入式开发人员最重要的决策之一。不同的文件系统侧重的功能不同，有些文件系统注重效率，有些注重文件大小，还有一些注重数据恢复。 PartitionsPartitions是对物理设备的逻辑划分，Partition根据不同的类型其数据也会根据对应类型的条款进行组织。一个物理设备可以只有一个Partition，也可以有多个。将物理设备划分为若干个Partiti">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-02%20上午10.08.17.png">
+<meta property="og:image" content="http://yoursite.com/images/Ext2-inode.gif">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.00.23.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.00.33.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.00.40.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.00.51.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-05%20上午9.01.47.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午1.59.55.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.02.07.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.26.00.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.30.42.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午2.40.35.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-09%20下午1.28.49.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-05%20下午2.58.45.png">
+<meta property="og:image" content="http://yoursite.com/images/捕获.PNG">
+<meta property="og:updated_time" content="2018-09-07T05:04:59.568Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="嵌入式Linux的文件系统">
+<meta name="twitter:description" content="嵌入式Linux文件系统的概述文件系统的选择是嵌入式开发人员最重要的决策之一。不同的文件系统侧重的功能不同，有些文件系统注重效率，有些注重文件大小，还有一些注重数据恢复。 PartitionsPartitions是对物理设备的逻辑划分，Partition根据不同的类型其数据也会根据对应类型的条款进行组织。一个物理设备可以只有一个Partition，也可以有多个。将物理设备划分为若干个Partiti">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202018-06-02%20上午10.08.17.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/09/嵌入式Linux的文件系统/"/>
+
+
+
+
+
+  <title>嵌入式Linux的文件系统 | Psyduck</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Psyduck</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/09/嵌入式Linux的文件系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">嵌入式Linux的文件系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-09T19:50:22+08:00">
+                2018-06-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="嵌入式Linux文件系统的概述"><a href="#嵌入式Linux文件系统的概述" class="headerlink" title="嵌入式Linux文件系统的概述"></a>嵌入式Linux文件系统的概述</h2><p>文件系统的选择是嵌入式开发人员最重要的决策之一。不同的文件系统侧重的功能不同，有些文件系统注重效率，有些注重文件大小，还有一些注重数据恢复。</p>
+<h3 id="Partitions"><a href="#Partitions" class="headerlink" title="Partitions"></a>Partitions</h3><p>Partitions是对物理设备的逻辑划分，Partition根据不同的类型其数据也会根据对应类型的条款进行组织。一个物理设备可以只有一个Partition，也可以有多个。将物理设备划分为若干个Partitions之后，每一个Partition都可以被独立的格式化为某个特定的文件系统。因此从逻辑上看Partition就是一个逻辑硬盘，文件系统就是写在这些逻辑硬盘上的。</p>
+<p><img src="/images/屏幕快照 2018-06-02 上午10.08.17.png" alt="屏幕快照 2018-06-02 上午10.08.17"></p>
+<p>上图截自<em>Embedded Linux Primer 2nd Edition</em>，为了方便说明与理解，左图给每一个Partition都添加了标签，这些标签在书上是没有的。在左图中，一个Flash存储设备被分成了4个Partition，每一个Partition相互独立，格式也可以各不相同。右图是每一个Partition内部存储的信息，可以看出每一个Partition都可以独立的被格式化为某种指定的文件系统。</p>
+<h3 id="最小根文件系统"><a href="#最小根文件系统" class="headerlink" title="最小根文件系统"></a>最小根文件系统</h3><p>文件系统中可以存放大量数据，可以是可执行文件，也可以是普通文本等等。但是从内核运行的角度来看，不是所有数据都是必须的，所以只存储了能够让内核正常运行的数据的文件系统就是最小文件系统。</p>
+<h3 id="虚拟文件系统-VFS"><a href="#虚拟文件系统-VFS" class="headerlink" title="虚拟文件系统(VFS)"></a>虚拟文件系统(VFS)</h3><p>虚拟文件系统本质上是一个接口层，各种文件系统通过实现相同的接口使得在一个操作系统中可以同时存在不同的文件系统，并且从用户的角度比不知道不同文件系统的存在。对用户而言，无论底层文件系统是什么，都可以用统一的接口进行操作从而从用户的角度消除了不同文件系统操作上的差异。</p>
+<h2 id="嵌入式Linux文件系统的常见类型简介"><a href="#嵌入式Linux文件系统的常见类型简介" class="headerlink" title="嵌入式Linux文件系统的常见类型简介"></a>嵌入式Linux文件系统的常见类型简介</h2><h3 id="ext2"><a href="#ext2" class="headerlink" title="ext2"></a>ext2</h3><p>ext2全称为second extended file system，是Linux第一款商业级文件系统。在ext3出现之前，ext2一直作为几个Linux发行版的默认文件系统，这些发行版包括Debian和Red Hat Linux等。基于flash的存储设备依然会采用ext2作为文件系统，flahs设备的写入次数是有限的，ext2与ext3不同，ext2没有日志功能，因此相较于ext3，ext2的写入操作更少，因此采用ext2作为文件系统可以提高flash设备的使用寿命。</p>
+<p>ext2中的空间被划分为块(block)。这些块被组成块组(block groups)。在一个大型文件系统中通常由成千上万个块。任意文件的数据被存放在一个单独的块组当中。当在读取大量连续数据时，这可以最小化磁盘的seeks操作。</p>
+<p>每一个块组包含了超级块(super block)的一个拷贝以及块组的描述符表(descriptor table)。所有的块组包含一个块位图(bitmap)，一个inode位图，一个inode表以及数据块。</p>
+<p>超级块包含了启动操作系统的重要信息。因此在文件系统中超级块的备份数据会被放在多个块组当中。但是只有文件系统第一个块中的拷贝会被用于启动。</p>
+<p>组描述符(group descriptor)存储了块位图的位置，inode位图以及每个块组inode表的起始位置。这些组描述符被存在组描述符表。</p>
+<h4 id="Inode"><a href="#Inode" class="headerlink" title="Inode"></a>Inode</h4><p>每个文件和目录都有一个inode表示。inode这个词来自”index node”。inode包含了文件大小、权限、所有权以及文件或目录在磁盘上的位置。</p>
+<p><img src="/images/Ext2-inode.gif" alt="Ext2-inode"></p>
+<blockquote>
+<p>“There are pointers to the first 12 blocks which contain the file’s data in the inode. There is a pointer to an indirect block (which contains pointers to the next set of blocks), a pointer to a doubly indirect block and a pointer to a trebly indirect block.”</p>
+</blockquote>
+<h4 id="目录-directory"><a href="#目录-directory" class="headerlink" title="目录(directory)"></a>目录(directory)</h4><p>目录是目录元素(diretory entry)的列表。每个目录元素将一个文件名与inode号关联，由inode号，文件名长度和文件名的文本数据组成。根目录永远存在inode号为2的inode中，这样文件系统的代码就可以在挂载时找到。子目录通过将子目录的名字存在name字段，并将子目录的inode号存在inode字段实现。硬连接(hard link)通过将同一个inode号与多个文件名关联来实现。通过不同文件名访问数据时，由于总是得到同一个inode号，因此访问的总是相同的数据。</p>
+<h4 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h4><p>当新的文件或目录被创建，ext2必须决定将数据存在哪。如果磁盘大部分为空，那么数据可能存在任何地方。当时如果能够将相关数据集中存放在一起，那么就可以减少磁盘seek时间最大化文件访问效率。</p>
+<p>ext2尝试将新创建的目录放在包含它父目录同一个块组中。ext2还会尝试着将文件存放在与它们有关的目录元素相同的块组中。但是如果块组已经满了，那么新的文件或目录会被存放在其它未满的块组当中。</p>
+<h3 id="ext3"><a href="#ext3" class="headerlink" title="ext3"></a>ext3</h3><p>ext3是ext2的升级版。与ext2最大的差别在与ext3支持日志功能。在日志的支持下，对文件系统做出的每一个变化都会被记录在一个特殊的文件当中，因此系统可以通过已知的日志点恢复。ext3的一个重要有点是可以在一次意外断电后直接挂载而不需要进行一致性检查，这也是日志提供的便利，因为在日志的支持下ext3可以直接回滚以确保一致性。</p>
+<h3 id="ext4"><a href="#ext4" class="headerlink" title="ext4"></a>ext4</h3><p>ext4是ext3的升级版，同样支持日志。ext4克服了ext3的一些缺点。ext3只能支持16T存储，而ext4可以支持1 exbibyte，并且单个文件大小可以达到1024GB</p>
+<h3 id="ReiserFS"><a href="#ReiserFS" class="headerlink" title="ReiserFS"></a>ReiserFS</h3><p>ReiserFS在SuSE和Gentoo等桌面发布版中十分流行。Reiser4支持日志功能。与ext3类似，ReiserFS保证一个给定的文件系统操作要么完整的完成，要么完全没有作用。与ext3不同的是，Reiser4为系统程序员引入了API以保证一个文件系统会话的原子性。</p>
+<h3 id="JFFS2"><a href="#JFFS2" class="headerlink" title="JFFS2"></a>JFFS2</h3><p>flash存储设备写入操作是一个耗时的操作。flash设备的写入耗时比硬盘的写入长，因此更容易由于意外的断电造成数据崩溃。JFFS2专门设计作为flash存储设备的文件系统，与ext2不同，JFFS2支持日志因此可以保证数据一致性。 flash每一个单元的写入次数有限，因此需要文件系统能够将写入操作均匀的分配给各个单元以提高flash的使用寿命，JFFS2通过wear leveling技术完成上述功能。</p>
+<h2 id="嵌入式Linux某个类型的文件系统的构造"><a href="#嵌入式Linux某个类型的文件系统的构造" class="headerlink" title="嵌入式Linux某个类型的文件系统的构造"></a>嵌入式Linux某个类型的文件系统的构造</h2><h3 id="Busybox介绍"><a href="#Busybox介绍" class="headerlink" title="Busybox介绍"></a>Busybox介绍</h3><p>几乎所有介绍busybox的文章都是会将它称为“嵌入式Linux的瑞士军刀”。Busybox提供了大量Linux命令行工具，并且去除了一些工具中不常用的选项，使得Busybox中提供的命令行工具简洁、轻便但又不失强大的功能，这一特点显然是受到嵌入式开发者青睐的。</p>
+<p>同时由于有些功能在特定的嵌入式产品中是不需要的，Busybox还提供了方便的配置方式，使得开发人员能够轻松的按需裁减Busybox，使其生成最符合当前开发产品的工具。</p>
+<h3 id="使用Busybox制作ext3文件系统"><a href="#使用Busybox制作ext3文件系统" class="headerlink" title="使用Busybox制作ext3文件系统"></a>使用Busybox制作ext3文件系统</h3><h3 id="Busybox配置-basename工具的添加与删除"><a href="#Busybox配置-basename工具的添加与删除" class="headerlink" title="Busybox配置(basename工具的添加与删除)"></a>Busybox配置(basename工具的添加与删除)</h3><p>s4418实验例程中已经在Busybox的目录下准备好了一份Busybox的配置文件<code>s4418_config</code>，在实验过程中只要将这个文件命名为<code>.config</code>，后续的Busybox编译过程就会按着这份配置进行。我们也可以为自己生成一份配置文件，Busybox为我们提供了很方便的工具。</p>
+<p>在Busybox目录下通过命令行输入<code>make menuconfig</code>，我们可以看到终端界面切换成了一个图形化界面：</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.00.23.png" alt="屏幕快照 2018-06-09 下午2.00.23"></p>
+<p>在这个界面当中我们可以为自己配置Busybox。在这次实验中我们一添加/删除<code>basename</code>命令行工具为例。</p>
+<p>将光标移动至<code>Coreutils</code>并按下回车。进入以下界面：</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.00.33.png" alt="屏幕快照 2018-06-09 下午2.00.33"></p>
+<p>从界面第一段的描述可以知道如何对每一条命令进行配置。可以看到当前<code>basename</code>前面的标志是<code>*</code>，这表明这个命令会出现在后续生成的一系列命令当中。在选中<code>basename</code>命令的情况下输入<code>N</code>可以看到<code>basename</code>前面的<code>*</code>标志消失了，这说明我们已经成功的去除了<code>basename</code>：</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.00.40.png" alt="屏幕快照 2018-06-09 下午2.00.40"></p>
+<p>配置完成时候选择<code>Exit</code>，回到上一层界面，继续选择<code>Exit</code>，图形化界面会提示是否保存配置:</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.00.51.png" alt="屏幕快照 2018-06-09 下午2.00.51"></p>
+<p>这里选择<code>Yes</code>。</p>
+<p>随后在Busybox目录下输入两行命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make</span><br><span class="line">make CONFIG_PREFIX=../root-mini install</span><br></pre></td></tr></table></figure>
+<p>下面是上述命令的执行过程:</p>
+<p><img src="/images/屏幕快照 2018-06-05 上午9.01.47.png" alt="屏幕快照 2018-06-05 上午9.01.47"></p>
+<p>编译成功后会在上层目录生成<code>root-mini</code>文件夹，里面就是基于我们刚才的配置生成的最小文件系统目录树。</p>
+<p>为了看到我们刚才的配置是否真的产生了作用，我们进入刚才生成的<code>root-mini</code>目录，通过以下命令可以看到<code>basename</code>命令是否成功添加或删除:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls bin | grep basename</span><br></pre></td></tr></table></figure>
+<p><img src="/images/屏幕快照 2018-06-09 下午1.59.55.png" alt="屏幕快照 2018-06-09 下午1.59.55"></p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.02.07.png" alt="屏幕快照 2018-06-09 下午2.02.07"></p>
+<p>上面两幅图分别表示成功添加和删除。</p>
+<h3 id="建立ext3文件系统镜像"><a href="#建立ext3文件系统镜像" class="headerlink" title="建立ext3文件系统镜像"></a>建立ext3文件系统镜像</h3><h4 id="总体过程"><a href="#总体过程" class="headerlink" title="总体过程"></a>总体过程</h4><p>这一步按照开发说明中的步骤执行即可。</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.26.00.png" alt="屏幕快照 2018-06-09 下午2.26.00"></p>
+<p>这段命令做了三件事情，首先是补充刚才生成的<code>root-mini</code>目录，使其拥有必要的链接库等。随后通过执行脚本<code>mkfs</code>生成一个ext3镜像文件<code>rootfs.img</code>，并将<code>root-mini</code>中的内容拷贝进镜像当中。最后将之前实现生成的uImage放入镜像当中。</p>
+<h4 id="mkfs脚本"><a href="#mkfs脚本" class="headerlink" title="mkfs脚本"></a>mkfs脚本</h4><p>上面的整个过程最终要的应该就是mkfs脚本中的内容了，这个脚本真正的产生了ext3文件系统镜像。下面我们看一下这个脚本中有哪些内容。</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.30.42.png" alt="屏幕快照 2018-06-09 下午2.30.42"></p>
+<p>我们逐条解释脚本中各个命令的作用。</p>
+<p>第一条命令创建了一个<code>rootfs_img</code>文件夹，这个文件随后用来最为ext文件系统镜像的挂载点，使得我们能够往镜像中放入必要的数据。</p>
+<p>第二条命令创建了一个名为<code>rootfs.img</code>的文件，这个文件的内容全部为0，块大小为1024 bytes，块总数为262144，即这个创建出来的文件存了$1024 \times 262144=268435456$字节的0。通过<code>ls</code>命令查看这个文件夹也可以看出这个结论：</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午2.40.35.png" alt="屏幕快照 2018-06-09 下午2.40.35"></p>
+<p>第三条命令<code>mkfs.ext3</code>将rootfs.img文件格式化为ext3格式，这个过程为这个rootfs.img文件创建了inode表等ext3文件系统的原信息。</p>
+<p>第四条命令将生成的rootfs.img镜像文件挂载到刚才创建的rootfs_img文件夹(挂载点)下，使得我们可以往这个镜像文件中存放根文件系统必要的数据。</p>
+<p>第五条命令将刚才由Busybox生成并且由我们手动补充了一些数据的<code>root-mini</code>中的所有内容拷贝至<code>rootfs.img</code>镜像当中。到第四条命令为止，<code>rootfs.img</code>已经是一个ext3格式的文件系统了，挂载之后可以当作普通的文件系统使用，不过这里我们要制作的是根文件系统，所以我们才需要额外存一些东西。</p>
+<p>至此我们要的根文件系统已经制作完成，剩下的就是卸载并输出成功的提示。</p>
+<h3 id="验证确实生成了ext3格式的文件系统"><a href="#验证确实生成了ext3格式的文件系统" class="headerlink" title="验证确实生成了ext3格式的文件系统"></a>验证确实生成了ext3格式的文件系统</h3><p>要验证我们确实生成了ext3格式的文件系统，我们可以将镜像文件挂载，然后用<code>df -T</code>命令查看当前系统所有挂载的文件系统:</p>
+<p><img src="/images/屏幕快照 2018-06-09 下午1.28.49.png" alt="屏幕快照 2018-06-09 下午1.28.49"></p>
+<p>图中红框圈出的部分就是我们刚才生成的文件系统，可以看到它确实是ext3格式。</p>
+<h3 id="烧写进板子"><a href="#烧写进板子" class="headerlink" title="烧写进板子"></a>烧写进板子</h3><p>按照开发手册中的步骤可以轻松的将我们生成的文件系统烧写至开发板:</p>
+<p><img src="/images/屏幕快照 2018-06-05 下午2.58.45.png" alt="屏幕快照 2018-06-05 下午2.58.45"></p>
+<h3 id="串口查看输出"><a href="#串口查看输出" class="headerlink" title="串口查看输出"></a>串口查看输出</h3><p>最后用串口将开发板与开发主机连接，通过Linux下的<code>minicom</code>或Windows中的超级终端可以看到开发板在串口中的输出如下：</p>
+<p><img src="/images/捕获.PNG" alt="捕获"></p>
+<h2 id="嵌入式Linux文件系统所基于的存储介质介绍"><a href="#嵌入式Linux文件系统所基于的存储介质介绍" class="headerlink" title="嵌入式Linux文件系统所基于的存储介质介绍"></a>嵌入式Linux文件系统所基于的存储介质介绍</h2><h3 id="闪存-Flash-memory"><a href="#闪存-Flash-memory" class="headerlink" title="闪存(Flash memory)"></a>闪存(Flash memory)</h3><p>闪存是可以电擦除和重新编程的电子（固态）非易失性计算机存储介质。</p>
+<p>东芝在20世纪80年代早期开发了EEPROM（电可擦除可编程只读存储器）的闪存，并于1984年将其推向市场。两种主要类型的闪存以NAND和NOR逻辑门命名。各个闪存单元呈现出与相应门电路类似的内部特性。</p>
+<p>虽然EPROM在重写之前必须完全擦除，但NAND型闪存可能会以块（或页）的形式写入和读取，而块（或页）通常比整个设备小得多。 NOR型闪存允许将单个机器字（字节）写入 - 擦除位置 - 或独立读取。</p>
+<p>NAND类型主要用于存储卡，USB闪存驱动器，固态驱动器（2009年或以后生产的）和类似产品，用于数据的一般存储和传输。 NAND或NOR闪存通常也用于将配置数据存储在众多数字产品中，这是以前由EEPROM或电池供电的静态RAM所实现的任务。闪存的一个关键缺点是，它只能在特定的块中承受相对较少的写周期。</p>
+<p>这两种类型的闪存的示例应用包括个人计算机，PDA，数字音频播放器，数码相机，移动电话，合成器，视频游戏，科学仪器，工业机器人和医疗电子产品。除了非易失性外，闪存还提供快速的读取访问时间，但速度不如静态RAM或ROM快。它的抗机械冲击能力有助于解释其在便携式设备中的硬盘受欢迎程度，以及它的高耐用性，承受高压，温度和浸入水中的能力等。</p>
+<p>尽管闪存在技术上是一种EEPROM，但术语“EEPROM”通常用于特指非易失性EEPROM，其可在小块中擦除，通常是字节。由于擦除周期较慢，所以较大的块大小用于闪存擦除时，在写入大量数据时，比非闪存EEPROM具有显着的速度优势。截至2013年，闪存的成本远低于字节可编程EEPROM，并且在系统需要大量非易失性固态存储器的情况下成为主要的存储器类型。</p>
+<h3 id="硬盘"><a href="#硬盘" class="headerlink" title="硬盘"></a>硬盘</h3><p>硬盘驱动器（HDD），硬盘，硬盘驱动器或固定磁盘[b]是一种机电数据存储设备，其使用磁存储器来存储和检索数字信息，使用一个或多个刚性快速旋转盘（盘片）涂覆磁性材料。盘片与磁头配对，磁头通常安排在移动的执行器臂上，用于读取和写入盘片表面的数据[2]。数据以随机访问的方式访问，这意味着可以按任何顺序存储或检索各个数据块，而不仅仅是顺序存储或检索。硬盘驱动器是一种非易失性存储器，即使在断电时也能保存存储的数据。</p>
+<p>HDD的主要特点是容量和性能。容量在与1000的功率对应的单位前缀中指定：1TB驱动器的容量为1,000千兆字节（GB;其中1千兆字节= 10亿字节）。通常，一些HDD的容量对用户不可用，因为它被文件系统和计算机操作系统使用，并且可能内置冗余以进行纠错和恢复。性能由将磁头移动到轨道或气缸所需的时间（平均访问时间）加上所需扇区在磁头下移动所花费的时间（平均等待时间，其是旋转中的物理旋转速度的函数）每分钟），最后是数据传输的速度（数据速率）。</p>
+<h3 id="RAM"><a href="#RAM" class="headerlink" title="RAM"></a>RAM</h3><p>随机存取存储器（RAM /ræm/）是一种存储当前正在使用的数据和机器码的计算机数据存储器。随机存取存储器装置允许以几乎相同的时间量读取或写入数据项，而不管存储器内的数据的物理位置如何。相比之下，对于其他直接访问数据存储介质，如硬盘，CD-RW，DVD-RW以及较旧的磁带和磁鼓存储器，读取和写入数据项所需的时间会根据其物理位置记录介质，由于机械限制，例如介质旋转速度和手臂移动。</p>
+<p>RAM包含多路复用和解复用电路，用于将数据线连接到寻址的存储器以读取或写入条目。通常，一个以上的存储位被相同的地址访问，RAM设备通常具有多条数据线，并且被称为“8位”或“16位”等设备。</p>
+<p>在当今的技术中，随机存取存储器采用集成电路的形式。 RAM通常与易失性存储器类型（如DRAM模块）相关联，如果电源被移除，存储的信息将会丢失，但非易失性RAM也已开发出来[1]。其他类型的非易失性存储器允许随机访问读取操作，但不允许写入操作或对其具有其他类型的限制。这些包括大多数类型的ROM和称为NOR-Flash的闪存类型。</p>
+<h2 id="未解决的疑问"><a href="#未解决的疑问" class="headerlink" title="未解决的疑问"></a>未解决的疑问</h2><p>在上面制作文件系统的过程中，我们通过查看<code>mkfs</code>脚本内容可以看到它在格式化<code>rootfs.img</code>时使用的命令是<code>mkfs.ext3</code>，并且在执行完脚本之后我们通过<code>df -T</code>命令也可以看出<code>rootfs.img</code>镜像确实是ext3格式，但是在最终的串口输出中我们却看到里面的内容显示的是根文件系统是ext4。</p>
+<h2 id="可以参考的资料"><a href="#可以参考的资料" class="headerlink" title="可以参考的资料"></a>可以参考的资料</h2><ol>
+<li>Building.Embedded.Linux.Systems，2nd，by OReilly.</li>
+<li>Embedded Linux Primer: A Practical, Real-World Approach，by Prentice Hall教材的第九章</li>
+<li>Linux Kernel Development 3rd Edition</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/10/嵌入式Linux_Bootloader/" rel="next" title="嵌入式Linux_Bootloader">
+                <i class="fa fa-chevron-left"></i> 嵌入式Linux_Bootloader
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/07/嵌入式Linux的驱动程序开发/" rel="prev" title="嵌入式Linux的驱动程序开发">
+                嵌入式Linux的驱动程序开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="Psyduck" />
+          
+            <p class="site-author-name" itemprop="name">Psyduck</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux文件系统的概述"><span class="nav-number">1.</span> <span class="nav-text">嵌入式Linux文件系统的概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Partitions"><span class="nav-number">1.1.</span> <span class="nav-text">Partitions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小根文件系统"><span class="nav-number">1.2.</span> <span class="nav-text">最小根文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟文件系统-VFS"><span class="nav-number">1.3.</span> <span class="nav-text">虚拟文件系统(VFS)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux文件系统的常见类型简介"><span class="nav-number">2.</span> <span class="nav-text">嵌入式Linux文件系统的常见类型简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ext2"><span class="nav-number">2.1.</span> <span class="nav-text">ext2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Inode"><span class="nav-number">2.1.1.</span> <span class="nav-text">Inode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#目录-directory"><span class="nav-number">2.1.2.</span> <span class="nav-text">目录(directory)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据存储"><span class="nav-number">2.1.3.</span> <span class="nav-text">数据存储</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ext3"><span class="nav-number">2.2.</span> <span class="nav-text">ext3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ext4"><span class="nav-number">2.3.</span> <span class="nav-text">ext4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ReiserFS"><span class="nav-number">2.4.</span> <span class="nav-text">ReiserFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JFFS2"><span class="nav-number">2.5.</span> <span class="nav-text">JFFS2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux某个类型的文件系统的构造"><span class="nav-number">3.</span> <span class="nav-text">嵌入式Linux某个类型的文件系统的构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Busybox介绍"><span class="nav-number">3.1.</span> <span class="nav-text">Busybox介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Busybox制作ext3文件系统"><span class="nav-number">3.2.</span> <span class="nav-text">使用Busybox制作ext3文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Busybox配置-basename工具的添加与删除"><span class="nav-number">3.3.</span> <span class="nav-text">Busybox配置(basename工具的添加与删除)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建立ext3文件系统镜像"><span class="nav-number">3.4.</span> <span class="nav-text">建立ext3文件系统镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总体过程"><span class="nav-number">3.4.1.</span> <span class="nav-text">总体过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mkfs脚本"><span class="nav-number">3.4.2.</span> <span class="nav-text">mkfs脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证确实生成了ext3格式的文件系统"><span class="nav-number">3.5.</span> <span class="nav-text">验证确实生成了ext3格式的文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#烧写进板子"><span class="nav-number">3.6.</span> <span class="nav-text">烧写进板子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#串口查看输出"><span class="nav-number">3.7.</span> <span class="nav-text">串口查看输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux文件系统所基于的存储介质介绍"><span class="nav-number">4.</span> <span class="nav-text">嵌入式Linux文件系统所基于的存储介质介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#闪存-Flash-memory"><span class="nav-number">4.1.</span> <span class="nav-text">闪存(Flash memory)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘"><span class="nav-number">4.2.</span> <span class="nav-text">硬盘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RAM"><span class="nav-number">4.3.</span> <span class="nav-text">RAM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#未解决的疑问"><span class="nav-number">5.</span> <span class="nav-text">未解决的疑问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以参考的资料"><span class="nav-number">6.</span> <span class="nav-text">可以参考的资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Psyduck</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

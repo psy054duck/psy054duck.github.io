@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="嵌入式Linux的驱动程序概述设备类型 块设备(block devices)。支持以块(block)为单位进行寻址，通常支持数据的随机访问。常见的块设备包括硬盘，flash一类的存储设备。块设备通过一个被称为block device node的特殊文件访问，通常被挂载为一个文件系统。 字符设备(character devices)。字符设备通常是不支持寻址的，数据通常以字节为单位以流(stream">
+<meta property="og:type" content="article">
+<meta property="og:title" content="嵌入式Linux的驱动程序开发">
+<meta property="og:url" content="http://yoursite.com/2018/07/07/嵌入式Linux的驱动程序开发/index.html">
+<meta property="og:site_name" content="Psyduck">
+<meta property="og:description" content="嵌入式Linux的驱动程序概述设备类型 块设备(block devices)。支持以块(block)为单位进行寻址，通常支持数据的随机访问。常见的块设备包括硬盘，flash一类的存储设备。块设备通过一个被称为block device node的特殊文件访问，通常被挂载为一个文件系统。 字符设备(character devices)。字符设备通常是不支持寻址的，数据通常以字节为单位以流(stream">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-29%20下午5.06.45.png">
+<meta property="og:image" content="http://yoursite.com/images/lxnode.jpg">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-29%20下午8.23.52.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-29%20下午8.32.01.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-06-29%20下午8.32.27.png">
+<meta property="og:updated_time" content="2018-09-07T05:04:20.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="嵌入式Linux的驱动程序开发">
+<meta name="twitter:description" content="嵌入式Linux的驱动程序概述设备类型 块设备(block devices)。支持以块(block)为单位进行寻址，通常支持数据的随机访问。常见的块设备包括硬盘，flash一类的存储设备。块设备通过一个被称为block device node的特殊文件访问，通常被挂载为一个文件系统。 字符设备(character devices)。字符设备通常是不支持寻址的，数据通常以字节为单位以流(stream">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202018-06-29%20下午5.06.45.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/07/嵌入式Linux的驱动程序开发/"/>
+
+
+
+
+
+  <title>嵌入式Linux的驱动程序开发 | Psyduck</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Psyduck</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/07/嵌入式Linux的驱动程序开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">嵌入式Linux的驱动程序开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-07T09:10:25+08:00">
+                2018-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="嵌入式Linux的驱动程序概述"><a href="#嵌入式Linux的驱动程序概述" class="headerlink" title="嵌入式Linux的驱动程序概述"></a>嵌入式Linux的驱动程序概述</h2><h3 id="设备类型"><a href="#设备类型" class="headerlink" title="设备类型"></a>设备类型</h3><ul>
+<li>块设备(block devices)。支持以块(block)为单位进行寻址，通常支持数据的随机访问。常见的块设备包括硬盘，flash一类的存储设备。块设备通过一个被称为block device node的特殊文件访问，通常被挂载为一个文件系统。</li>
+<li>字符设备(character devices)。字符设备通常是不支持寻址的，数据通常以字节为单位以流(stream)的形式被访问。字符设备通过一个被称为character device node的特殊文件访问。应用直接通过device node访问字符设备，这点与块设备不同。</li>
+<li>网络设备(network devices)。网络设备有时又称以太网设备(ethernet devices)，这一别名取自网络设备中最常见的类型。网络设备通过物理适配器(如802.11卡)以及一个特定的协议(如IP)访问网络。网络设备并不是通过device node访问，而是通过特殊接口socket API，这打破了Unix设计原则，”everything is a file”。</li>
+</ul>
+<h3 id="设备驱动"><a href="#设备驱动" class="headerlink" title="设备驱动"></a>设备驱动</h3><p>系统设计的一个极具挑战的任务是如何用合理的方式划分功能。Unix和Linux中的设备驱动模型可以自然的划分软件和硬件功能。</p>
+<p>传统的实时操作系统没有设备驱动的概念，这导致许多经验丰富的嵌入式开发人员一开始难以接受Linux这种使用虚拟内存的操作系统中提出的设备驱动。对于有经验的嵌入式开发人员而言，虚拟内存，内核空间和用户空间的概念增加了一定的开发复杂度。</p>
+<h3 id="设备驱动的优点"><a href="#设备驱动的优点" class="headerlink" title="设备驱动的优点"></a>设备驱动的优点</h3><p>设备驱动提出的一个基本目的是避免用户程序直接操作关键的内核数据结构以及硬件设备。除此之外，一个编写良好的设备驱动可以为用户屏蔽不同设备之间的差异。例如一个应用程序要往硬盘中写入数据，这个应用程序不需要了解当前设备使用的硬盘扇区有多大，不论是512-byte还是1024-byte，用户程序只需要打开文件并使用<code>write</code>命令即可。在这个例子中，设备驱动为用户解决了硬件上的细节问题。</p>
+<h3 id="可加载模块-Loadable-Modules"><a href="#可加载模块-Loadable-Modules" class="headerlink" title="可加载模块(Loadable Modules)"></a>可加载模块(Loadable Modules)</h3><p>Linux允许在运行时添加或移除内核组件。这一个特性不仅为用户提供了灵活性，还为设备驱动开发人员提供了便利。可加载模块的存在使得开发人员不需要一改动了驱动代码就要重启开发板，只需要将新生成的驱动文件下载至开发板使用相关命令重新加载新的驱动即可，显然这极大的提供了开发效率。</p>
+<p>可加载模块对于嵌入式系统而言十分重要。与上述开发过程的例子类似，当系统中的一个模块需要升级时，我们不需要重启系统，只需要重新加载更新后的模块即可。同时，由于模块可以在运行时被加载，所以与模块本身可以不需要放在空间有限的启动设备当中。</p>
+<h2 id="嵌入式Linux的常见外设及其驱动程序介绍"><a href="#嵌入式Linux的常见外设及其驱动程序介绍" class="headerlink" title="嵌入式Linux的常见外设及其驱动程序介绍"></a>嵌入式Linux的常见外设及其驱动程序介绍</h2><h3 id="电容式触摸屏"><a href="#电容式触摸屏" class="headerlink" title="电容式触摸屏"></a>电容式触摸屏</h3><p>电容式触摸屏是利用人体的电流感进行工作的。电容式触摸屏的感应屏是一块四层复合玻璃屏，玻璃屏的内表面和夹层各涂有一层导电层，最外层是一薄层矽土玻璃保护层。当我们用手指触摸在感应屏上的时候，人体的电场让手指和触摸屏表面形成一个耦合电容，对于高频电流来说，电容是直接导体，于是手指从接触点吸走一个很小的电流。这个电流从触摸屏的四角上的电极中流出，并且流经四个电极的电流与手指到四角的距离成正比，控制器通过对这四个电流比例的精确计算，得出触摸点的位置。</p>
+<h3 id="CMOS摄像头"><a href="#CMOS摄像头" class="headerlink" title="CMOS摄像头"></a>CMOS摄像头</h3><p>CMOS摄像头是一种镜头的名称，是数码设备用来感光成像的部件。</p>
+<p>CMOS被看作未来的成像器件。因为CMOS摄像头构件相对简单，与现有的大规模集成电路生产工艺相同，从而生产成本可以降低。从原理上，CMOS的信号是以点为单位的电荷信号，速度很快，也很省电。</p>
+<p>CMOS摄像头利用矽感光二极体进行光与电的转换。这种转换的原理与具备“太阳电能”电子计算机的“太阳能电池”效应相近，光线越强、电力越强；反之，光线越弱、电力也就越弱。</p>
+<h3 id="TF卡"><a href="#TF卡" class="headerlink" title="TF卡"></a>TF卡</h3><p>TF卡(Trans-flash Card)是一种为满足安全性、容量、性能和使用环境等各方面的需求而设计的一种新型存储器件，TF卡允许在两种模式下工作即TF模式和SPI模式。</p>
+<p>SD卡是一种基于半导体快闪记忆器的新一代记忆设备，由于它体积小、数据传输速度快、可热插拔等优良的特性，被广泛地应用于便携式设备如电子词典、移动电话、数码相机、汽车导航系统。在 SD 卡 3.0 规范中，SD卡的理论最大容量可达 2TB，理论最大读写速度可达 104MB/s（在最新的 4.10 规范中，论最大读写速度已提高到 312MB/s），而且 Micro SD 卡是 SD 类型中尺寸最小的一种 SD 卡，尺寸仅为 15mm<em>11mm</em>1mm，如果能把 SD 卡的这些优势应用于自动化测试系统中，例如存储诊断测试数据、卫星载荷数据和导弹挂飞载荷数据等信息，能够为目前自动化测试与控制系统中的数据存储提供一种新的可行性方案，并且在小型化、大容量、高速率数据存储中具有无可替代的作用。</p>
+<h2 id="Linux驱动程序的框架简介"><a href="#Linux驱动程序的框架简介" class="headerlink" title="Linux驱动程序的框架简介"></a>Linux驱动程序的框架简介</h2><h3 id="进程访问访问设备的过程"><a href="#进程访问访问设备的过程" class="headerlink" title="进程访问访问设备的过程"></a>进程访问访问设备的过程</h3><p>当进程通过设备节点这个特殊文件类型访问设备时，内核通过文件中存储的信息确定该设备的主设备号与次设备号，内核通过主设备号确定设备所对应的驱动，驱动通过次设备区分不同的物理或逻辑设备，最后驱动执行对应的操作，完成用户进程的请求。</p>
+<h4 id="主设备号-major-number-与次设备号-minor-number"><a href="#主设备号-major-number-与次设备号-minor-number" class="headerlink" title="主设备号(major number)与次设备号(minor number)"></a>主设备号(major number)与次设备号(minor number)</h4><p>两个设备号中只有主设备号对内核有实际用处，内核通过主设备号来确定指定设备所对应的设备驱动。随后设备驱动通过次设备号来区分不同的物理或逻辑设备。</p>
+<h4 id="设备节点-device-node"><a href="#设备节点-device-node" class="headerlink" title="设备节点(device node)"></a>设备节点(device node)</h4><p>Linux内核使用主设备号与次设备号来表示设备。Unix使用特殊的文件类型——设备节点来表示设备。设备节点的一大作用是用一个人类可读的字符串(路径)表示设备，当进程通过这个字符串访问设备时，内核可以通过设备节点存储的信息将人类可读的字符串(路径)转换为主次设备号对。</p>
+<p>类Unix操作系统几乎都将设备节点存放在/dev下，以MacOS为例:</p>
+<p><img src="/images/屏幕快照 2018-06-29 下午5.06.45.png" alt="屏幕快照 2018-06-29 下午5.06.45"></p>
+<p>从图中所列出的信息可以看出设备节点存储了与权限相关的信息，主设备号和次设备号。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>设备节点与互联网中的DNS类似，可以通过它将人类可读的路径转换为主次设备号，而DNS可以将人类可读的域名转换为IP地址。</p>
+<p>主设备号类似IP地址，内核通过主设备号确定处理该设备操作的驱动，而通过IP地址，网络请求可以通过IP协议传输到目标主机。</p>
+<p>次设备号类似端口号，驱动通过次设备号区分不同的设备，而主机通过端口号区分不同的服务。<br><img src="/images/lxnode.jpg" alt="lxnode"></p>
+<h3 id="cdev"><a href="#cdev" class="headerlink" title="cdev"></a>cdev</h3><p><code>struct cdev</code>是Linux内核代码中用于表示字符设备的结构体。其内容如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> <span class="title">kobj</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">owner</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> *<span class="title">ops</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list</span>;</span></span><br><span class="line">    <span class="keyword">dev_t</span> dev;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="kobject"><a href="#kobject" class="headerlink" title="kobject"></a>kobject</h4><p>尽管Linux内核时通过C语言实现的，但是其中存在着大量面向对象的思想，其中<code>struct kobject</code>就是实例之一。最初<code>kobject</code>被看成一个简单的引用计数器，但是随着时间的推移，它的功能被不断拓展。设计者为<code>kboject</code>提供了许多函数，类似于面向对象中的方法。<code>kobject</code>通常作为一个字段嵌入在其它结构体中，如<code>cdev</code>中的<code>kobj</code>。当其它结构体有了<code>kobject</code>字段就可以拥有设计者所提供的所有<code>kobject</code>功能。引用计数是最基本的功能。此外，<code>kobject</code>中还有<code>parent</code>字段，这个字段为所有含有<code>kobject</code>的结构体提供了层次结构，这也是2.6版本引入设备模型的重要原因，通过<code>kobject</code>内核可以掌握所有设备的信息，包括设备树的拓扑结构。</p>
+<p><code>kobject</code>具体定义如下:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">entry</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> *<span class="title">parent</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kset</span> *<span class="title">kset</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kboj_type</span> *<span class="title">ktype</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sysfs_dirent</span> *<span class="title">sd</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kref</span> <span class="title">kref</span>;</span></span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> state_initialized:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> state_in_sysfs:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> state_add_uevent_sent:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> state_remove_uevent_sent:<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> uevent_suppress:<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ktype"><a href="#ktype" class="headerlink" title="ktype"></a>ktype</h4><p>每一个<code>kobject</code>都有一个指定类型，这个类型由<code>ktype</code>表示。<code>ktype</code>的基本作用是为特定类型的<code>kobject</code>提供默认行为，因此多个相同类型的<code>kobject</code>可以共享这些默认行为，不需要额外定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">kobj_type</span> &#123;</span></span><br><span class="line">    <span class="keyword">void</span> (*release)(struct kobject *);</span><br><span class="line">    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">sysfs_ops</span> *<span class="title">sysfs_ops</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">attribute</span> **<span class="title">default_attrs</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>release</code>指针指向析构函数，这个析构函数会在<code>kobject</code>引用计数归零时被调用，这个函数会清理与这个<code>kobject</code>相关的内存。</p>
+<p><code>sysfs_ops</code>指针描述了sysfs文件的读写行为。</p>
+<p><code>default_attrs</code>定义了与该<code>kobject</code>相关的属性信息。</p>
+<h4 id="kset"><a href="#kset" class="headerlink" title="kset"></a>kset</h4><p><code>kset</code>是一个容器，可以将有关联的几个<code>kobject</code>聚集在一起。它本质上是一个链表。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">kset</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">list</span>;</span></span><br><span class="line">    <span class="keyword">spinlock_t</span> list_lock;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kobject</span> <span class="title">kobj</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kset_uevent_ops</span> *<span class="title">uevent_ops</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中，<code>uenvent_ops</code>描述了在这个<code>kset</code>中的<code>kobject</code>的热插拔(hotplug)行为。</p>
+<h4 id="file-operations"><a href="#file-operations" class="headerlink" title="file_operations"></a>file_operations</h4><p><code>file_operations</code>中的成员函数是字符设备驱动程序设计的主题内容，当用户程序进行<code>open()</code>, <code>write()</code>等函数调用时，<code>file_operations</code>中对应的函数最终会被调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">module</span> *<span class="title">owner</span>;</span></span><br><span class="line">    <span class="keyword">loff_t</span> (*llseek)(struct file *, <span class="keyword">loff_t</span>, <span class="keyword">int</span>);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*read)(struct file *, <span class="keyword">char</span> *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span>*);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*write)(struct file *, <span class="keyword">const</span> <span class="keyword">char</span> *, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span> *);</span><br><span class="line">    <span class="keyword">int</span> (*readdir)(struct file *, <span class="keyword">void</span> *, <span class="keyword">filldir_t</span>);</span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">int</span> <span class="params">(*poll)</span><span class="params">(struct file *, struct poll_table_struct *)</span></span>;</span><br><span class="line">    <span class="keyword">int</span> (*ioctl)(struct inode *, struct file *, <span class="keyword">unsigned</span> <span class="keyword">int</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>);</span><br><span class="line">    <span class="keyword">int</span> (*mmap)(struct file *, struct vm_aread_struct *);</span><br><span class="line">    <span class="keyword">int</span> (*open)(struct inode*, struct file *);</span><br><span class="line">    <span class="keyword">int</span> (*flush)(struct file *);</span><br><span class="line">    <span class="keyword">int</span> (*release)(struct inode*, struct file *);</span><br><span class="line">    <span class="keyword">int</span> (*fsync)(struct file *, struct dentry*, intdatasync);</span><br><span class="line">    <span class="keyword">int</span> (*fasync)(<span class="keyword">int</span>, struct file *, <span class="keyword">int</span>);</span><br><span class="line">    <span class="keyword">int</span> (*lock)(struct file*, <span class="keyword">int</span>, struct file_lock*);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*readv)(struct file *, <span class="keyword">const</span> struct iovec*, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">loff_t</span>*);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*writev)(struct file *, <span class="keyword">const</span> struct iovec*, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">loff_t</span>*);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*sendpage)(struct file *, struct page *, <span class="keyword">int</span>, <span class="keyword">size_t</span>, <span class="keyword">loff_t</span>*, <span class="keyword">int</span>);</span><br><span class="line">    <span class="function"><span class="keyword">unsigned</span> <span class="title">long</span> <span class="params">(*get_unmaaped_area)</span><span class="params">(struct file *, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>, <span class="keyword">unsigned</span> <span class="keyword">long</span>)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以<em>Embedded Linux Primer</em>中的<code>hello.c</code>的一个片段为例。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">hello_fops</span>;</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_open</span><span class="params">(struct inode *inode, struct file *file)</span> </span>&#123;</span><br><span class="line">    printk(<span class="string">"hello_open: successfule\n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* ... */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span> <span class="title">hello_fops</span> = &#123;</span></span><br><span class="line">    owner:		THIS_MODULE,</span><br><span class="line">    read:		hello_read,</span><br><span class="line">    write:		hello_write,</span><br><span class="line">    ioctl:		hello_ioctl,</span><br><span class="line">    open:		hello_open,</span><br><span class="line">    release:	hello_release,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* ... */</span></span><br></pre></td></tr></table></figure>
+<p>从这段代码中可以看到，在写一个简单的字符设备驱动时，我们要为这个驱动实现需要的函数，这些函数与相应的系统调用对应，并且是执行系统调用时最终会被执行的函数。这些函数作为<code>struct file_operations</code>对应字段的值被填入，内核通过这个结构体知晓这些函数的存在，并且在系统调用时可以使用这些函数。</p>
+<h2 id="嵌入式Linux的字符设备驱动程序举例"><a href="#嵌入式Linux的字符设备驱动程序举例" class="headerlink" title="嵌入式Linux的字符设备驱动程序举例"></a>嵌入式Linux的字符设备驱动程序举例</h2><h3 id="代码解释"><a href="#代码解释" class="headerlink" title="代码解释"></a>代码解释</h3><h4 id="驱动程序-hello-driver-c"><a href="#驱动程序-hello-driver-c" class="headerlink" title="驱动程序(hello_driver.c)"></a>驱动程序(hello_driver.c)</h4><p><code>hello_driver.c</code>中定义了4个文件操作函数，分别对应<code>open()</code>, <code>close()</code>, <code>read()</code>, <code>write()</code>。</p>
+<h5 id="hello-open"><a href="#hello-open" class="headerlink" title="hello_open"></a>hello_open</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_open</span><span class="params">(struct inode* inode,struct file* filp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="comment">/*增加管理此设备的 owner模块的使用计数*/</span></span><br><span class="line">	printk(KERN_INFO<span class="string">"open the description successfully.\n"</span>);</span><br><span class="line">	try_module_get(THIS_MODULE);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数的作用很简单，当用户进程通过打开设备节点时，屏幕会输出<code>open the description successfully.</code>。</p>
+<h5 id="hello-release"><a href="#hello-release" class="headerlink" title="hello_release"></a>hello_release</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">hello_release</span><span class="params">(struct inode* inode,struct file* filp)</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="comment">/*减少管理此设备的 owner模块的使用计数*/</span></span><br><span class="line">	printk(KERN_INFO<span class="string">"close the description successfully.\n"</span>);</span><br><span class="line">	module_put(THIS_MODULE);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数的作用与<code>hello_open</code>类似，当用户进程关闭设备节点时，屏幕输出<code>close the description successfully.</code>。</p>
+<h5 id="hello-read"><a href="#hello-read" class="headerlink" title="hello_read"></a>hello_read</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> ssize_t <span class="title">hello_read</span><span class="params">(struct file* filp,<span class="keyword">char</span> __user *buf,<span class="keyword">size_t</span> count,<span class="keyword">loff_t</span>* f_pos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	copy_to_user(buf, (<span class="keyword">char</span> *)&amp;hello_value, <span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">char</span>));</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">char</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该函数的作用是将<code>hello_value</code>这个变量的值传入<code>buf</code>所指向的内存，即读取了<code>hello_value</code>的值。</p>
+<h5 id="hello-write"><a href="#hello-write" class="headerlink" title="hello_write"></a>hello_write</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> ssize_t <span class="title">hello_write</span><span class="params">(struct file* filp,<span class="keyword">char</span> __user *buf,<span class="keyword">size_t</span> count,<span class="keyword">loff_t</span>* f_pos)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> value;</span><br><span class="line">	<span class="keyword">if</span>(count==<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">/*向用户空间写数据,如果写失败，则返回错误*/</span></span><br><span class="line">		<span class="keyword">if</span>(copy_from_user(&amp;value, buf,<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">char</span>)))</span><br><span class="line">				<span class="keyword">return</span> -EFAULT;</span><br><span class="line">		hello_value=(value&amp;<span class="number">0x0F</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">char</span>);</span><br><span class="line">	&#125;<span class="keyword">else</span></span><br><span class="line">	   <span class="keyword">return</span> -EFAULT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数的作用是将用户通过<code>buf</code>传入的值存入<code>hello_value</code>中。</p>
+<p>除此之外，这份文件中还定义了<code>static int hello_ctrl_init(void)</code>函数，这个函数被<code>static int __init hello_init(void)</code>函数调用，即这个函数会在模块加载值被执行。这个函数除了做基本初始化之外，还会在<code>/dev</code>目录下创建<code>/dev/hello</code>设备节点。</p>
+<p><img src="/images/屏幕快照 2018-06-29 下午8.23.52.png" alt="屏幕快照 2018-06-29 下午8.23.52"></p>
+<h4 id="用户程序-hello-test-c"><a href="#用户程序-hello-test-c" class="headerlink" title="用户程序(hello_test.c)"></a>用户程序(hello_test.c)</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> **argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> fd,i;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> val=<span class="number">0</span>,value;</span><br><span class="line">	fd=open(<span class="string">"/dev/hello"</span>,O_RDWR);</span><br><span class="line">	<span class="keyword">if</span>(fd==<span class="number">-1</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Failed to open device %s.\n"</span>,DEVICE_NAME);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">9</span>;i++)</span><br><span class="line">	&#123;</span><br><span class="line">		val=val+<span class="number">1</span>;</span><br><span class="line">		write(fd,&amp;val,<span class="keyword">sizeof</span>(val));</span><br><span class="line">		<span class="keyword">if</span>(read(fd,&amp;value,<span class="keyword">sizeof</span>(value))!=<span class="number">0</span>)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"value=%0x:\n"</span>,value);</span><br><span class="line">		&#125;</span><br><span class="line">		sleep(<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	close(fd);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用户程序首先打开<code>/dev/hello</code>设备文件，此时<code>hello_driver.c</code>中的<code>hello_open</code>会被执行，于是屏幕应该输出<code>open the description successfully.</code>。随后的<code>for</code>循环将<code>1~9</code>分别通过<code>write</code>系统调用传入驱动，每一次<code>write</code>调用都会使<code>hello_write</code>被执行，于是<code>1~9</code>依次被存在<code>hello_value</code>中。每一次执行完<code>write</code>之后，用户程序立即调用<code>read</code>，将驱动存储的<code>hello_value</code>值取出并存在<code>value</code>中，在通过<code>printf</code>函数输出，所以会有9次<code>value=%0x:</code>的输出，其中<code>%0x</code>为<code>1~9</code>。最后程序通过<code>close</code>关闭文件，并最终使得<code>hello_release</code>被调用，输出<code>close the description successfully.</code>。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p>按照教程将编译生成的<code>hello_test</code>和<code>hello_driver.ko</code>传送至开发板指定目录。</p>
+<p>加载<code>hello_driver</code>驱动：</p>
+<p><img src="/images/屏幕快照 2018-06-29 下午8.32.01.png" alt="屏幕快照 2018-06-29 下午8.32.01"></p>
+<p>运行<code>hello_test</code>程序：</p>
+<p><img src="/images/屏幕快照 2018-06-29 下午8.32.27.png" alt="屏幕快照 2018-06-29 下午8.32.27"></p>
+<p>可以看到这些输出与上述分析相符。</p>
+<h2 id="本文档的不足与补充"><a href="#本文档的不足与补充" class="headerlink" title="本文档的不足与补充"></a>本文档的不足与补充</h2><p>Linux中的设备模型(device model)十分复杂，我们做完实验，看了收集的资料后也没能完全理解。从这份报告中也能看出我们对设备模型的介绍有限。</p>
+<p><em>Linux Kernel Development</em>这本书介绍了Linux内核的方方面面，其中对设备模型的描述可以让我们对设备模型有初步的了解。</p>
+<p><em>Linux Device Drivers</em>这本书从名字上就可以看出来是专门介绍如何编写设备驱动的，所以这本书对设备模型的介绍十分详尽。</p>
+<h2 id="可以参考的资料"><a href="#可以参考的资料" class="headerlink" title="可以参考的资料"></a>可以参考的资料</h2><p>Embedded.Linux.Primer.2nd.Edition</p>
+<p>Linux Kernel Development 3rd Edition</p>
+<p>Linux Device Drivers 3rd-Edition</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/09/嵌入式Linux的文件系统/" rel="next" title="嵌入式Linux的文件系统">
+                <i class="fa fa-chevron-left"></i> 嵌入式Linux的文件系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/07/嵌入式Linux的GUI应用程序开发/" rel="prev" title="嵌入式Linux的GUI应用程序开发">
+                嵌入式Linux的GUI应用程序开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="Psyduck" />
+          
+            <p class="site-author-name" itemprop="name">Psyduck</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的驱动程序概述"><span class="nav-number">1.</span> <span class="nav-text">嵌入式Linux的驱动程序概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设备类型"><span class="nav-number">1.1.</span> <span class="nav-text">设备类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备驱动"><span class="nav-number">1.2.</span> <span class="nav-text">设备驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设备驱动的优点"><span class="nav-number">1.3.</span> <span class="nav-text">设备驱动的优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可加载模块-Loadable-Modules"><span class="nav-number">1.4.</span> <span class="nav-text">可加载模块(Loadable Modules)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的常见外设及其驱动程序介绍"><span class="nav-number">2.</span> <span class="nav-text">嵌入式Linux的常见外设及其驱动程序介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#电容式触摸屏"><span class="nav-number">2.1.</span> <span class="nav-text">电容式触摸屏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMOS摄像头"><span class="nav-number">2.2.</span> <span class="nav-text">CMOS摄像头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TF卡"><span class="nav-number">2.3.</span> <span class="nav-text">TF卡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux驱动程序的框架简介"><span class="nav-number">3.</span> <span class="nav-text">Linux驱动程序的框架简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程访问访问设备的过程"><span class="nav-number">3.1.</span> <span class="nav-text">进程访问访问设备的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#主设备号-major-number-与次设备号-minor-number"><span class="nav-number">3.1.1.</span> <span class="nav-text">主设备号(major number)与次设备号(minor number)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设备节点-device-node"><span class="nav-number">3.1.2.</span> <span class="nav-text">设备节点(device node)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.1.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cdev"><span class="nav-number">3.2.</span> <span class="nav-text">cdev</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kobject"><span class="nav-number">3.2.1.</span> <span class="nav-text">kobject</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ktype"><span class="nav-number">3.2.2.</span> <span class="nav-text">ktype</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#kset"><span class="nav-number">3.2.3.</span> <span class="nav-text">kset</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#file-operations"><span class="nav-number">3.2.4.</span> <span class="nav-text">file_operations</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#嵌入式Linux的字符设备驱动程序举例"><span class="nav-number">4.</span> <span class="nav-text">嵌入式Linux的字符设备驱动程序举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码解释"><span class="nav-number">4.1.</span> <span class="nav-text">代码解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#驱动程序-hello-driver-c"><span class="nav-number">4.1.1.</span> <span class="nav-text">驱动程序(hello_driver.c)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#hello-open"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">hello_open</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hello-release"><span class="nav-number">4.1.1.2.</span> <span class="nav-text">hello_release</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hello-read"><span class="nav-number">4.1.1.3.</span> <span class="nav-text">hello_read</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#hello-write"><span class="nav-number">4.1.1.4.</span> <span class="nav-text">hello_write</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户程序-hello-test-c"><span class="nav-number">4.1.2.</span> <span class="nav-text">用户程序(hello_test.c)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验结果"><span class="nav-number">4.2.</span> <span class="nav-text">实验结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本文档的不足与补充"><span class="nav-number">5.</span> <span class="nav-text">本文档的不足与补充</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可以参考的资料"><span class="nav-number">6.</span> <span class="nav-text">可以参考的资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Psyduck</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>

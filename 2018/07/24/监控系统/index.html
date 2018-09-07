@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="实现功能   功能 描述     开发板本地监控 摄像头采集的视频可以在开发板LCD上实时显示   通过网络实现后台控制 后台界面有三个按钮，分别是Begin, Pause和Screenshot，代表开始和暂停采集视频以及截取一帧视频并保存为BMP格式   通过网络实现后台监控 后台界面一个区域用于实时显示开发板摄像头采集的视频    V4L2V4L2简介V4L是Video4Linux的缩写，它是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="监控系统">
+<meta property="og:url" content="http://yoursite.com/2018/07/24/监控系统/index.html">
+<meta property="og:site_name" content="Psyduck">
+<meta property="og:description" content="实现功能   功能 描述     开发板本地监控 摄像头采集的视频可以在开发板LCD上实时显示   通过网络实现后台控制 后台界面有三个按钮，分别是Begin, Pause和Screenshot，代表开始和暂停采集视频以及截取一帧视频并保存为BMP格式   通过网络实现后台监控 后台界面一个区域用于实时显示开发板摄像头采集的视频    V4L2V4L2简介V4L是Video4Linux的缩写，它是">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.15.11.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.19.54.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.30.23.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.36.01.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.38.52.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.49.41.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午12.04.48.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午12.09.33.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午12.11.51.png">
+<meta property="og:image" content="http://yoursite.com/images/IMG_0613.jpg">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午12.30.21.png">
+<meta property="og:image" content="http://yoursite.com/images/camera.bmp">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午1.03.09.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午1.00.41.png">
+<meta property="og:image" content="http://yoursite.com/images/屏幕快照%202018-07-24%20上午1.01.20.png">
+<meta property="og:updated_time" content="2018-09-07T05:09:25.098Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="监控系统">
+<meta name="twitter:description" content="实现功能   功能 描述     开发板本地监控 摄像头采集的视频可以在开发板LCD上实时显示   通过网络实现后台控制 后台界面有三个按钮，分别是Begin, Pause和Screenshot，代表开始和暂停采集视频以及截取一帧视频并保存为BMP格式   通过网络实现后台监控 后台界面一个区域用于实时显示开发板摄像头采集的视频    V4L2V4L2简介V4L是Video4Linux的缩写，它是">
+<meta name="twitter:image" content="http://yoursite.com/images/屏幕快照%202018-07-23%20下午11.15.11.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/24/监控系统/"/>
+
+
+
+
+
+  <title>监控系统 | Psyduck</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Psyduck</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/24/监控系统/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Psyduck">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/psyduck.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Psyduck">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">监控系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-24T02:16:25+08:00">
+                2018-07-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/嵌入式操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">嵌入式操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="实现功能"><a href="#实现功能" class="headerlink" title="实现功能"></a>实现功能</h2><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开发板本地监控</td>
+<td>摄像头采集的视频可以在开发板LCD上实时显示</td>
+</tr>
+<tr>
+<td>通过网络实现后台控制</td>
+<td>后台界面有三个按钮，分别是Begin, Pause和Screenshot，代表开始和暂停采集视频以及截取一帧视频并保存为BMP格式</td>
+</tr>
+<tr>
+<td>通过网络实现后台监控</td>
+<td>后台界面一个区域用于实时显示开发板摄像头采集的视频</td>
+</tr>
+</tbody>
+</table>
+<h2 id="V4L2"><a href="#V4L2" class="headerlink" title="V4L2"></a>V4L2</h2><h3 id="V4L2简介"><a href="#V4L2简介" class="headerlink" title="V4L2简介"></a>V4L2简介</h3><p>V4L是Video4Linux的缩写，它是Linux操作系统上的一组设备驱动，为视频实时捕获提供了一组方便的API。因为这一组API，我们可以用类似的操作来控制不同的摄像头。</p>
+<p>我们采用的驱动就是V4L，它是Linux内核代码中已经提供的，所以只需要在内核配置文件中将它加入那么编译内核时也会将V4L一同编译，由于我们选择的是将V4L一同编译进内核而不是模块，所以没有加载过程。</p>
+<h3 id="V4L2视频捕获流程"><a href="#V4L2视频捕获流程" class="headerlink" title="V4L2视频捕获流程"></a>V4L2视频捕获流程</h3><p>视频捕获流程可以大致归纳为以下流程：</p>
+<p>$$打开设备\rarr查看设备功能\rarr设置图片格式\rarr申请帧缓冲\rarr内存映射\rarr帧缓冲入列\rarr开始采集\rarr读取数据\rarr帧缓冲重新入列\rarr关闭设备$$</p>
+<h4 id="打开设备"><a href="#打开设备" class="headerlink" title="打开设备"></a>打开设备</h4><p>在Unix“万物皆文件”的哲学理念下，所有设备也是以文件的形式存在于操作系统当中，并且一些基本操作与普通文件无异，例如都可以通过<code>open</code>, <code>write</code>, <code>read</code>这些系统操作进行打开和读写。因此打开摄像头的操作也就变成了下面这样:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> fd = open(<span class="string">"/dev/video0"</span>, O_RDWR);</span><br></pre></td></tr></table></figure>
+<p>可以看到这个操作就和普通文件一样，在系统中找到摄像头对应的文件(在本次项目中我们的摄像头对应的文件是<code>/dev/video0</code>)通过系统调用<code>open</code>以指定的操作权限打开(在上面这个例子中以可读可写的权限打开)。</p>
+<h4 id="查看设备功能"><a href="#查看设备功能" class="headerlink" title="查看设备功能"></a>查看设备功能</h4><p>所有设备都有相应的信息，例如版本，芯片名等，要获取这些信息可以用类似下面这样的代码来得到：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">v4l2_capability</span> <span class="title">cap</span>;</span></span><br><span class="line"><span class="keyword">int</span> ret = ioctl(fd, VIDIOC_QUERYCAP, &amp;cap);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"card: %s"</span>, cap.card);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"version: %s"</span>, cap.version);</span><br></pre></td></tr></table></figure>
+<p>尽管Unix将所有设备的操作都抽象成了文件操作，但是设备始终与普通文件不同难以通过简单的文件操作实现所有功能，所以才有了<code>ioctl</code>这个系统调用，在上面的代码中我们定义了一个<code>v4l2_capability</code>结构体，通过<code>VIDIOC_QUERYCAP</code>查询摄像头的功能并将结果存储在<code>cap</code>当中。<code>v4l2_capability</code>结构体有哪些字段以及每个字段各代表什么意思可以在<a href="https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/vidioc-querycap.html#vidioc-querycap" target="_blank" rel="noopener">这里</a>查到。</p>
+<h4 id="设置图片格式"><a href="#设置图片格式" class="headerlink" title="设置图片格式"></a>设置图片格式</h4><p>不同摄像头支持不同的图片输出格式，常见的格式有YUV和RGB。</p>
+<h5 id="RGB简介"><a href="#RGB简介" class="headerlink" title="RGB简介"></a>RGB简介</h5><p>RGB是我们最常见的图片存储方式，它将像素颜色分为三个分量分别为红、绿、蓝，三个颜色，用这三种颜色不同程度的组合来表示颜色。比较常见的RGB是用R, G, B三个分量各用一个8位，因此每个像素的大小为24位。</p>
+<h5 id="YUV简介"><a href="#YUV简介" class="headerlink" title="YUV简介"></a>YUV简介</h5><p>与RGB类似，YUV也是通过三个分量来表示颜色，其中Y表示明亮度，U表示色度，V表示浓度。</p>
+<p>YUV根据不同的采样策略，还有不同的表示方式，在此次项目中我们采用的是4:2:2，所以下面主要介绍这种表示方法的YUV。</p>
+<p>4:2:2表示2:1的水平取样，垂直完全采样。其中Y、U、V的比例为4:2:2。这里的2:1水平采样是指在水平方向上每两个Y对应一个UV。也就是说每个像素点各自拥有一个Y，但是水平方向上每两个像素点共享一组UV。因此在4:2:2格式下采集出来的格式为$Y_1UY_2V$,这四个值表示里两个像素点，其中第一个像素点对应的YUV为$Y_1UV$，第二个像素点为$Y_2UV$。因此如果图片大小为$width \times height$，那么用这种表示方式得到的图片占用大小为$width \times height\times2\  bytes$。</p>
+<h5 id="格式设置"><a href="#格式设置" class="headerlink" title="格式设置"></a>格式设置</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">v4l2_format</span> <span class="title">fmt</span>;</span></span><br><span class="line">fmt.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">fmt.fmt.pix.width = WIDTH;</span><br><span class="line">fmt.fmt.pix.height = HEIGHT;</span><br><span class="line">fmt.fmt.pix.pixelformat = V4L2_PIX_FMT_YUYV;</span><br><span class="line">fmt.fmt.pix.field = V4L2_FIELD_INTERLACED;</span><br><span class="line">ioctl(fd, VIDIOC_S_FMT, &amp;fmt);</span><br></pre></td></tr></table></figure>
+<p>首先定义一个<code>v4l2_format</code>结构体<code>fmt</code>，通过定义这个变量的各个字段来设置格式。</p>
+<ul>
+<li><code>fmt.type</code>用于定义数据流格式。</li>
+<li><code>fmt.fmt.pix.widht</code>和<code>fmt.fmt.pix.height</code>分别为宽和高。</li>
+<li><code>fmt.fmt.pix.pixelformat</code>用于定义图片格式，这里我们使用YUYV，就是上面所说的4:2:2</li>
+<li><code>fmt.fmt.pix.field</code>用于指定field的顺序。摄像头在采集视频的时候不是一瞬间就曝光一个完整的帧，而是通过采集两个field来组成一个帧。两个field得到的时间点是不同的，因此我们需要指定顺序。更详细的内容可以参考<a href="https://linuxtv.org/downloads/v4l-dvb-apis/uapi/v4l/field-order.html#field-order" target="_blank" rel="noopener">Field order</a></li>
+</ul>
+<p>最后通过<code>VIDIOC_S_FMT</code>命令<code>ioctl</code>按照<code>fmt</code>中的配置来设置我们的摄像头。</p>
+<p>当然，这里设置了图片格式之后还需要通过<code>fmt</code>再次确认摄像头是否按照我们的意愿被设置了，因为内核对不同摄像头的支持也不尽相同，所以在上面的<code>ioctl</code>结束之后如果有差异，那么内核会将<code>fmt</code>对应字段设置为内核真正做的配置。</p>
+<h4 id="申请帧缓冲"><a href="#申请帧缓冲" class="headerlink" title="申请帧缓冲"></a>申请帧缓冲</h4><p>像摄像头申请帧缓冲本质上就是在内存中开辟几块内存，摄像头可以将自己采集到的视频数据存放在这些内存当中，我们只需要访问这些内存就可以获取数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">v4l2_requestbuffers</span> <span class="title">req</span>;</span></span><br><span class="line">req.count = <span class="number">4</span>;</span><br><span class="line">req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">req.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">ioctl(fd, VIDIOC_REQBUFS, &amp;req);<span class="comment">//申请缓冲，</span></span><br><span class="line"><span class="keyword">if</span> (req.count &lt; <span class="number">2</span>)&#123;</span><br><span class="line">    perror(<span class="string">"buffer memory is Insufficient! \n"</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码向摄像头申请四个缓冲帧。并且这些帧对应的内存是用户随后的用户空间映射使用的。</p>
+<h4 id="映射用户空间"><a href="#映射用户空间" class="headerlink" title="映射用户空间"></a>映射用户空间</h4><p>上一步向摄像头申请了缓冲帧，但是这些缓冲帧所在的地址<code>fd</code>表示的文件内部使用的内存，这部分内存是用户无法直接访问的，因此我们需要使用内存地址映射的方式来访问缓冲帧。</p>
+<h5 id="mmap函数介绍"><a href="#mmap函数介绍" class="headerlink" title="mmap函数介绍"></a>mmap函数介绍</h5><p><code>mmap</code>函数在用户地址空间当中开辟一块内存，并且将这段内存与指定文件中的某一个块内存关联，即对用户地址空间的内存读写会直接反应在文件中的那块内存当中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">mmap</span><span class="params">(<span class="keyword">void</span> *addr, <span class="keyword">size_t</span> length, <span class="keyword">int</span> prot, <span class="keyword">int</span> flags, <span class="keyword">int</span> fd, <span class="keyword">off_t</span> offset)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>addr</code>用于指定用户空间中的起始地址，但是并不代表内核会准确的使用这个地址做为起始。内核会以这个值作为参考选择一个按页对齐的内存作为映射的起始。如果这个值是<code>NULL</code>，那么内核就自己指定一个起始地址。</li>
+<li><code>length</code>用于指定这段内存的长度</li>
+<li><code>prot</code>用于指定用户对这块内存的读写和执行的权限。</li>
+<li><code>flags</code>用于指定对这块内存的修改是否对其它进程可见</li>
+<li><code>fd</code>表示要映射的文件</li>
+<li><code>offset</code>表示要映射的内存在文件中的偏移量</li>
+</ul>
+<h5 id="将摄像头中的缓冲帧映射在用户空间"><a href="#将摄像头中的缓冲帧映射在用户空间" class="headerlink" title="将摄像头中的缓冲帧映射在用户空间"></a>将摄像头中的缓冲帧映射在用户空间</h5><p>从上面对<code>mmap</code>的介绍可以知道，要将缓冲帧映射在用户地址空间当中，我们还需要知道这些缓冲帧在文件当中的偏移量和长度。这也可以通过<code>ioctl</code>得到。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">v4l2_buffer</span> <span class="title">buf</span>;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nbufs; ++i) &#123;</span><br><span class="line">    <span class="built_in">memset</span>(&amp;buf, <span class="number">0</span>, <span class="keyword">sizeof</span> buf);</span><br><span class="line">    buf.index = i;</span><br><span class="line">    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    buf.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">    ioctl(dev, VIDIOC_QUERYBUF, &amp;buf);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码向摄像头依次查询每一个缓冲帧的相关信息，我们关心的信息有两个，分别是长度和在文件中的偏移量。执行了上述代码之后，这些信息分别存储在<code>buf.length</code>和<code>buf.m.offset</code>当中。于是内存地址映射就可以用下面的代码执行：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span>* mem[<span class="number">4</span>];</span><br><span class="line"><span class="keyword">int</span> length[<span class="number">4</span>];</span><br><span class="line">mem[i] = mmap(<span class="literal">NULL</span>, buf.length, PROT_READ | PROT_WRITE, MAP_SHARED, dev, buf.m.offset);</span><br><span class="line">length[i] = buf.length;</span><br></pre></td></tr></table></figure>
+<p>将上面的代码放入上面的<code>for</code>循环当中，执行结束之后<code>mem[i]</code>就是第i个缓冲帧在用户空间中的地址。这里将缓冲帧的长度存下来的主要目的是方便随后释放这些内存。</p>
+<h4 id="缓冲帧入列"><a href="#缓冲帧入列" class="headerlink" title="缓冲帧入列"></a>缓冲帧入列</h4><p>完成了用户地址映射之后，就可以在程序当中操作这些缓冲帧，但是我们需要摄像头将采集到的数据存放在缓冲帧当中。为了达到这个目的我们需要将申请到的缓冲帧放入队列里，这样摄像头才会将采集到的数据放入缓冲帧当中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nbufs; ++i) &#123;</span><br><span class="line">    <span class="built_in">memset</span>(&amp;buf, <span class="number">0</span>, <span class="keyword">sizeof</span> buf);</span><br><span class="line">    buf.index = i;</span><br><span class="line">    buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">    buf.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">    ret = ioctl(dev, VIDIOC_QBUF, &amp;buf)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 上述代码将所有申请到的缓冲区放入队列，随后启动摄像头之后，摄像头就会将采集到数据存放到处于队列中的缓冲帧。</p>
+<h4 id="开始采集"><a href="#开始采集" class="headerlink" title="开始采集"></a>开始采集</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">ioctl(fd, VIDIOC_STREAMON, &amp;type);</span><br></pre></td></tr></table></figure>
+<p>上述代码命令摄像头开始采集数据，采集得到的数据会被存放到已入队列的缓冲帧里。</p>
+<h4 id="读取数据"><a href="#读取数据" class="headerlink" title="读取数据"></a>读取数据</h4><p>摄像头开始采集数据之后，我们需要知道它是否已经采集了一帧图像，以及它将这帧图像放入了哪个缓冲帧当中。这些都可以通过<code>iotcl</code>获得。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> <span class="title">pfds</span>[1];</span></span><br><span class="line">pfds[<span class="number">0</span>].fd = dev;</span><br><span class="line">pfds[<span class="number">0</span>].events = POLLIN | POLLERR;</span><br><span class="line">poll(pfds, <span class="number">1</span>, <span class="number">10000</span>); <span class="comment">//10s</span></span><br><span class="line"><span class="built_in">memset</span>(&amp;buf, <span class="number">0</span>, <span class="keyword">sizeof</span> buf);</span><br><span class="line">buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;</span><br><span class="line">buf.memory = V4L2_MEMORY_MMAP;</span><br><span class="line">ret = ioctl(dev, VIDIOC_DQBUF, &amp;buf);</span><br></pre></td></tr></table></figure>
+<p>这里首先使用<code>poll</code>进行轮询，如果摄像头已经采集了一帧那么<code>poll</code>便会返回继续执行后面的代码，这里还设置了一个<code>timeout</code>如果等待10s还是没有一帧数据也同样会继续执行后面的代码。随后的代码与申请缓冲帧非常相似，只是<code>ioctl</code>中用的是<code>VIDIOC_DQBUF</code>。这段代码将队列中存有数据的缓冲帧出列，并且将<code>buf</code>中的字段修改为这一出列缓冲帧的信息，我们要用的信息是<code>buf.index</code>。通过这个字段我们就可以在<code>mem</code>数组当中索引到相应的缓冲帧，即<code>mem[buf.index]</code>。先前我们进行了映射，对<code>mem[buf.index]</code>的操作就是对设备中真正的缓冲帧的操作。这里<code>mem[buf.index]</code>当中就是以YUYV格式存放的图像数据。</p>
+<h4 id="缓冲帧重新入列"><a href="#缓冲帧重新入列" class="headerlink" title="缓冲帧重新入列"></a>缓冲帧重新入列</h4><p>读取了缓冲帧的数据之后还要将这个帧重新入列，否则读了几帧之后摄像头就没有缓冲帧用来存放新采集的数据了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ioctl(fd, VIDIOC_QBUF, &amp;buf);</span><br></pre></td></tr></table></figure>
+<p>这里不需要在修改<code>buf</code>中的数据，因为我们要入列的缓冲帧就是刚才出列的，所以<code>buf</code>中的数据就是我们需要勇于入列的。</p>
+<h4 id="关闭设备"><a href="#关闭设备" class="headerlink" title="关闭设备"></a>关闭设备</h4><p>关闭设备本身是很简单的操作，先前说过在Unix当中对设备的操作就与文件操作一样，所以关闭设备用<code>close</code>就可以做到。但是由于我们先前对设备中的缓冲帧做了映射，<code>mmap</code>的操作与<code>malloc</code>有点相似，其返回出来的地址可以看成是一种动态内存分配，所以在关闭设备之前还要将这些内存释放了。<code>mmap</code>申请出来的内存可以用<code>munmap</code>来释放。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;n_buffers; ++i)&#123;</span><br><span class="line">    munmap(mem[i], length[i]);</span><br><span class="line">&#125;</span><br><span class="line">close(fd);</span><br></pre></td></tr></table></figure>
+<h2 id="项目代码介绍"><a href="#项目代码介绍" class="headerlink" title="项目代码介绍"></a>项目代码介绍</h2><h3 id="开发板代码"><a href="#开发板代码" class="headerlink" title="开发板代码"></a>开发板代码</h3><h4 id="代码目录"><a href="#代码目录" class="headerlink" title="代码目录"></a>代码目录</h4><p><img src="/images/屏幕快照 2018-07-23 下午11.15.11.png" alt="屏幕快照 2018-07-23 下午11.15.11"></p>
+<p><code>camera.cpp</code>中主要实现了<code>Camera</code>类，这个类主要实现了报告中第二部分的摄像头操作，<code>mainwindow.cpp</code>中主要实现了网络通信以及一些必要的信号与槽的连接。</p>
+<h4 id="Camera类"><a href="#Camera类" class="headerlink" title="Camera类"></a>Camera类</h4><p><img src="/images/屏幕快照 2018-07-23 下午11.19.54.png" alt="屏幕快照 2018-07-23 下午11.19.54"></p>
+<p><code>Camera</code>类的声明部分如图所示，各个方法与报告中第二部分大部分一致，所以这里就不多说明了。</p>
+<p>特殊的地方在与<code>Camera</code>类继承了<code>QThread</code>类，使得这个类中的方法可以在另一个线程中执行，方便后面的视频显示操作。其中的一些操作会在后面的<code>mainwindow.cpp</code>中一并说明。</p>
+<h4 id="网络通信"><a href="#网络通信" class="headerlink" title="网络通信"></a>网络通信</h4><h5 id="initSocket函数"><a href="#initSocket函数" class="headerlink" title="initSocket函数"></a>initSocket函数</h5><p>QT已经封装了UDP和TCP两种Socket，在项目中我们用到的是UDP协议，因为项目中传输的数据是视频，所以有些帧丢失是可以容忍的，并且链路也都不复杂，所以包丢失或事乱序的情况几乎不会出现，所以UDP协议更合适本次项目。</p>
+<p><img src="/images/屏幕快照 2018-07-23 下午11.30.23.png" alt="屏幕快照 2018-07-23 下午11.30.23"></p>
+<p>我们将开发板的IP地址设置为<code>192.168.1.230</code>，所以代码中我们将socket与这个地址绑定。随后将socket的<code>readRead</code>信号与<code>MainWindow</code>的<code>process</code>槽绑定，这样以来一旦socket接收到数据就会触发<code>process()</code>函数。</p>
+<h5 id="process函数"><a href="#process函数" class="headerlink" title="process函数"></a>process函数</h5><p><img src="/images/屏幕快照 2018-07-23 下午11.36.01.png" alt="屏幕快照 2018-07-23 下午11.36.01"></p>
+<p>这个函数用于处理从远程主机发送过来的请求，远程主机上会发送的请求共两种，分别是开始采集视频和暂停采集视屏。在代码当中我们通过<code>bool</code>变量<code>isrunning</code>来确定是否采集数据，所以当接收到相应的请求之后修改这个变量就行了。</p>
+<h4 id="视频显示"><a href="#视频显示" class="headerlink" title="视频显示"></a>视频显示</h4><h5 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h5><p><img src="/images/屏幕快照 2018-07-23 下午11.38.52.png" alt="屏幕快照 2018-07-23 下午11.38.52"></p>
+<p>这段代码将<code>camera</code>的<code>send</code>信号与<code>MainWindow</code>的<code>display()</code>槽绑定。然后开始运行<code>camera</code>。注意，先前提过，<code>Camera</code>是<code>QThread</code>的子类，所以这里的<code>camera-&gt;start()</code>会创建一个新的线程，在这个新线程当中会执行<code>camera</code>的<code>run</code>方法，这个方法中实现了视频的采集，并且每采集完一帧之后便会发出<code>send</code>信号，于是<code>display</code>函数便会执行完成一帧的显示。</p>
+<p>让<code>Camera</code>继承<code>QThread</code>的原因会在后面的<em>遇到的问题及解决方式</em> 中说明。</p>
+<h5 id="display函数"><a href="#display函数" class="headerlink" title="display函数"></a>display函数</h5><p><img src="/images/屏幕快照 2018-07-23 下午11.49.41.png" alt="屏幕快照 2018-07-23 下午11.49.41"></p>
+<p>这个函数主要做了两件事，第一是将摄像头采集到的数据在开发板上显示，第二是通过UDP协议将采集到的数据传送到远程主机上，我们将远程主机的IP地址设置为了<code>192.168.1.205</code>。</p>
+<p>代码中<code>camera-&gt;img</code>是一个<code>QImage</code>类型的数据，在<code>camera</code>发送<code>send</code>信号之前，会将采集到的帧数据存放到这个变量当中，在通过图中24行的代码将这个图片显示在UI界面中的一个<code>label</code>上，这就完成了视频在开发板上的显示。</p>
+<p>在本次项目中我们采用UDP进行视频传输，但是一帧的数据过大，不能够通过一个数据包完成传输，所以在代码中我们通过一个循环将一帧的数据每<code>1023</code>字节作为一个数据包发送给远程主机。</p>
+<h3 id="远程主机代码"><a href="#远程主机代码" class="headerlink" title="远程主机代码"></a>远程主机代码</h3><h4 id="initSocket函数-1"><a href="#initSocket函数-1" class="headerlink" title="initSocket函数"></a>initSocket函数</h4><p><img src="/images/屏幕快照 2018-07-24 上午12.04.48.png" alt="屏幕快照 2018-07-24 上午12.04.48"></p>
+<p>这部分代码除了初始化与绑定<code>socket</code>之外，还做了一系列连接。前三个连接将界面上的三个按钮的<code>clicked</code>信号与对应的处理函数连接在一起。其中<code>pause()</code>和<code>begin()</code>两个函数就是通过UDP向开发板发送信号，这里不做说明。下面介绍<code>screenshot()</code>函数。</p>
+<p><img src="/images/屏幕快照 2018-07-24 上午12.09.33.png" alt="屏幕快照 2018-07-24 上午12.09.33"></p>
+<p>函数很简单，通过QT提供的API就可以简单的完成图片存储的功能。代码中的<code>img</code>与上面的<code>camera-&gt;img</code>一样使用与存储图片数据的，所以直接调用<code>save</code>方法就可以将当前显示的这一个帧图片以<code>bmp</code>格式保存。</p>
+<h4 id="display函数-1"><a href="#display函数-1" class="headerlink" title="display函数"></a>display函数</h4><p><img src="/images/屏幕快照 2018-07-24 上午12.11.51.png" alt="屏幕快照 2018-07-24 上午12.11.51"></p>
+<p>这个函数只有在<code>socket</code>接收到数据包时才会被调用，但是要注意的是这个函数的一次调用不一定可以完整的接收到一帧数据，所以我们用<code>static int j = 0</code>定义出了变量<code>j</code>，用于记录接收到的数据表示图片中的哪段数据，并且在合适的时候重新置为0。同样要注意，我们在开发板上已经将采集到的YUYV格式转换为了RGB，所以图中的代码用<code>200 * 200 * 3</code>表示一帧图片的大小，其中200 * 200是图片的长和宽。</p>
+<h2 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h2><p>由于摄像头性能不是很好，所以出现的画面不是很清晰，并且由于开发板上的LCD比较小，所以我们设定摄像头采集画面的大小只有200 * 200。同时开发板上的LCD也不是很好，所以开发板上的画面与远程主机的画面色调不太相同。</p>
+<h3 id="开发板画面"><a href="#开发板画面" class="headerlink" title="开发板画面"></a>开发板画面</h3><p><img src="/images/IMG_0613.jpg" alt="IMG_0613"></p>
+<h3 id="远程主机界面"><a href="#远程主机界面" class="headerlink" title="远程主机界面"></a>远程主机界面</h3><p><img src="/images/屏幕快照 2018-07-24 上午12.30.21.png" alt="屏幕快照 2018-07-24 上午12.30.21"></p>
+<h3 id="通过截屏功能获得的图片"><a href="#通过截屏功能获得的图片" class="headerlink" title="通过截屏功能获得的图片"></a>通过截屏功能获得的图片</h3><p><img src="/images/camera.bmp" alt="camera"></p>
+<h2 id="遇到的问题以及解决方案"><a href="#遇到的问题以及解决方案" class="headerlink" title="遇到的问题以及解决方案"></a>遇到的问题以及解决方案</h2><h3 id="内核驱动与Tiny6410的摄像头驱动不兼容"><a href="#内核驱动与Tiny6410的摄像头驱动不兼容" class="headerlink" title="内核驱动与Tiny6410的摄像头驱动不兼容"></a>内核驱动与Tiny6410的摄像头驱动不兼容</h3><p>这个问题非常隐秘，因为我们一开始完全没想过Tiny6410的驱动会写得与内核中的有出入。导致一开始我们无法向摄像头查询缓冲帧信息。在想摄像头查询缓冲帧时总是以错误码22结束程序，后来我们在网上查到这个错误码代表着参数错误，所以我们才怀疑是<code>iotcl</code>出了问题。</p>
+<p><img src="/images/屏幕快照 2018-07-24 上午1.03.09.png" alt="屏幕快照 2018-07-24 上午1.03.09"></p>
+<p>上图是我们在查询缓冲帧时对<code>buf</code>做的设置，这里用到了<code>buf.memory</code>这个字段，但是在其它摄像头驱动里其实是不会用到这个字段的，但是Tiny6410提供的该摄像头驱动使用了这个字段，所以导致问题的出现。具体原因是V4L2中的<code>ioctl</code>会对传入的数据结构做删减，导致在摄像头驱动里的<code>ioctl</code>无法得到正确的<code>memory</code>的值，所以会出现参数错误的提示。下面是Linux 2.6.38中V4L2中的代码片段：</p>
+<p><img src="/images/屏幕快照 2018-07-24 上午1.00.41.png" alt="屏幕快照 2018-07-24 上午1.00.41"></p>
+<p>图中的函数在V4L2中的<code>ioctl</code>被调用，用于获得要保留的数据结构的长度，在图中用红框圈出的部分可以看到当命令为<code>QUERYBUF</code>时这个函数返回的长度只计算到<code>type</code>字段为止，而<code>memory</code>字段不在这个范围内，所以导致了上面的问题出现。</p>
+<p>这个问题很好解决，只需要将图中红框内的<code>type</code>修改为<code>memory</code>然后重新编译内核即可，修改后如下图所示：</p>
+<p><img src="/images/屏幕快照 2018-07-24 上午1.01.20.png" alt="屏幕快照 2018-07-24 上午1.01.20"></p>
+<h3 id="远程主机的画面出现交错"><a href="#远程主机的画面出现交错" class="headerlink" title="远程主机的画面出现交错"></a>远程主机的画面出现交错</h3><p>在我们的实现当中开发板传到远程主机的数据包中并没有携带顺序这一个信息，而每一帧的数据又是放在不同的数据包当中，所以远程主机接收到的第一个数据包中的数据不一定会是第一个像素的数据，所以会造成画面交错。</p>
+<p>解决方案有很多，比如在发送的数据包当中加入顺序这个数据，当远程主机接收到数据包时首先通过顺序这个字段判断当前的数据包是否为第一个像素的，如果是就将<code>j</code>设为0。这样就能保证远程主机的画面渲染总是正确的。</p>
+<p>还有一个方案比较简单，就是首先将远程主机上的客户端先打开，由于<code>display</code>函数只有在接收到数据包时才会被调用，所以在开发板的程序开始运行之前<code>display</code>中的<code>j</code>一定是0，之后再运行开发板上的程序，数据就会开始传输，此时远程主机接收到的第一个数据包就是第一个像素的数据。</p>
+<p>当然上面的方案其实都是建立在数据包传输在传输过程中不会出现丢包或是乱序的问题，而UDP并不能保证这个问题。只是由于此次项目中的链路只有一根网线和两台主机，所以上面的两个问题几乎不可能发生，所以两个方案都是可行的。</p>
+<h2 id="内核与文件系统定制"><a href="#内核与文件系统定制" class="headerlink" title="内核与文件系统定制"></a>内核与文件系统定制</h2><h3 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h3><p>在Tiny6410中提供的内核配置文件里已经将V4L2加入内核，所以我们就不做添加了。由于内核复杂，所以我们无法确定哪些是必要的部分，所以我们只删减了明显不需要的部分，下面是删除的内容及理由</p>
+<table>
+<thead>
+<tr>
+<th>删减内容</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LED</td>
+<td>在上面的报告内容中可以看到我们不会用到开发板的</td>
+</tr>
+<tr>
+<td>USB</td>
+<td>我们从老师那里拿到的摄像头并不是USB接口，所以不需要USB支持</td>
+</tr>
+<tr>
+<td>sound</td>
+<td>整个项目用不到与声音有关的内容</td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>文件系统的配置我们是参考s4418教程中提供的，教程中制作出来的文件系统已经是最小文件系统，只需要在里面加入qt的动态链接库就足以让我们的项目顺利运行起来。不过s4418中的文件系统还是包含了一些我们不需要的命令，比如<code>ping</code>，所以我们将这些命令删除了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/07/嵌入式Linux的GUI应用程序开发/" rel="next" title="嵌入式Linux的GUI应用程序开发">
+                <i class="fa fa-chevron-left"></i> 嵌入式Linux的GUI应用程序开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/images/psyduck.jpg"
+              alt="Psyduck" />
+          
+            <p class="site-author-name" itemprop="name">Psyduck</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现功能"><span class="nav-number">1.</span> <span class="nav-text">实现功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V4L2"><span class="nav-number">2.</span> <span class="nav-text">V4L2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#V4L2简介"><span class="nav-number">2.1.</span> <span class="nav-text">V4L2简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#V4L2视频捕获流程"><span class="nav-number">2.2.</span> <span class="nav-text">V4L2视频捕获流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#打开设备"><span class="nav-number">2.2.1.</span> <span class="nav-text">打开设备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看设备功能"><span class="nav-number">2.2.2.</span> <span class="nav-text">查看设备功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置图片格式"><span class="nav-number">2.2.3.</span> <span class="nav-text">设置图片格式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#RGB简介"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">RGB简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#YUV简介"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">YUV简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#格式设置"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">格式设置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#申请帧缓冲"><span class="nav-number">2.2.4.</span> <span class="nav-text">申请帧缓冲</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#映射用户空间"><span class="nav-number">2.2.5.</span> <span class="nav-text">映射用户空间</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#mmap函数介绍"><span class="nav-number">2.2.5.1.</span> <span class="nav-text">mmap函数介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将摄像头中的缓冲帧映射在用户空间"><span class="nav-number">2.2.5.2.</span> <span class="nav-text">将摄像头中的缓冲帧映射在用户空间</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓冲帧入列"><span class="nav-number">2.2.6.</span> <span class="nav-text">缓冲帧入列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开始采集"><span class="nav-number">2.2.7.</span> <span class="nav-text">开始采集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读取数据"><span class="nav-number">2.2.8.</span> <span class="nav-text">读取数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓冲帧重新入列"><span class="nav-number">2.2.9.</span> <span class="nav-text">缓冲帧重新入列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭设备"><span class="nav-number">2.2.10.</span> <span class="nav-text">关闭设备</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目代码介绍"><span class="nav-number">3.</span> <span class="nav-text">项目代码介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发板代码"><span class="nav-number">3.1.</span> <span class="nav-text">开发板代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码目录"><span class="nav-number">3.1.1.</span> <span class="nav-text">代码目录</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Camera类"><span class="nav-number">3.1.2.</span> <span class="nav-text">Camera类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络通信"><span class="nav-number">3.1.3.</span> <span class="nav-text">网络通信</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#initSocket函数"><span class="nav-number">3.1.3.1.</span> <span class="nav-text">initSocket函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#process函数"><span class="nav-number">3.1.3.2.</span> <span class="nav-text">process函数</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#视频显示"><span class="nav-number">3.1.4.</span> <span class="nav-text">视频显示</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造函数"><span class="nav-number">3.1.4.1.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#display函数"><span class="nav-number">3.1.4.2.</span> <span class="nav-text">display函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程主机代码"><span class="nav-number">3.2.</span> <span class="nav-text">远程主机代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#initSocket函数-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">initSocket函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#display函数-1"><span class="nav-number">3.2.2.</span> <span class="nav-text">display函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#开发板画面"><span class="nav-number">4.1.</span> <span class="nav-text">开发板画面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程主机界面"><span class="nav-number">4.2.</span> <span class="nav-text">远程主机界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过截屏功能获得的图片"><span class="nav-number">4.3.</span> <span class="nav-text">通过截屏功能获得的图片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题以及解决方案"><span class="nav-number">5.</span> <span class="nav-text">遇到的问题以及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内核驱动与Tiny6410的摄像头驱动不兼容"><span class="nav-number">5.1.</span> <span class="nav-text">内核驱动与Tiny6410的摄像头驱动不兼容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#远程主机的画面出现交错"><span class="nav-number">5.2.</span> <span class="nav-text">远程主机的画面出现交错</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核与文件系统定制"><span class="nav-number">6.</span> <span class="nav-text">内核与文件系统定制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内核"><span class="nav-number">6.1.</span> <span class="nav-text">内核</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统"><span class="nav-number">6.2.</span> <span class="nav-text">文件系统</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Psyduck</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
